@@ -56,14 +56,12 @@ sim_bcrw <- function(n_steps, # Number of steps to simulate
   val <- raster::extract(lands, cells)
   # Get distances
   dist <- dists[which(dists < prange)]
-  ## THIS PART WAS CHANGED, CHECK THAT IT WORKS AS EXPECTED
   # Combine
   cell_info <- cbind.data.frame(within_prange, cells, val, dist)
   # Exclude the current position or the animal won't move
-  cell_info <- cell_info[!cell_info$cell == start_cell, ]
+  cell_info <- cell_info[cell_info$cell != start_cell, ]
   # Rank cells based on best habitat value and lower distance and select the top
-  end_point <- cell_info[, order(val, -dist)][1, ]
-  ## END
+  end_point <- cell_info[order(-cell_info$val, cell_info$dist), ][1, ]
 
   # 4. Calculate the bearing from the current position to the attraction cell
   dx <- end_point[, 1] - out[[1]]
@@ -112,11 +110,9 @@ sim_bcrw <- function(n_steps, # Number of steps to simulate
     cells <- neighbors[[cell]][which(dists < prange)]
     val <- raster::extract(lands, cells)
     dist <- dists[which(dists < prange)]
-    ## THIS PART WAS CHANGED, CHECK THAT IT WORKS AS EXPECTED
     cell_info <- cbind.data.frame(within_prange, cells, val, dist)
-    cell_info <- cell_info[!cell_info$cell == start_cell, ]
-    end_point <- cell_info[, order(val, -dist)][1, ]
-    ## END
+    cell_info <- cell_info[cell_info$cell != start_cell, ]
+    end_point <- cell_info[order(-cell_info$val, cell_info$dist), ][1, ]
     dx <- end_point[, 1] - x[t]
     dy <- end_point[, 2] - y[t]
     bbias[t] <- atan2(y = dy, x = dx)
