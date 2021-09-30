@@ -1,0 +1,151 @@
+# Simulate Biased Correlated Random Walk (BCRW)
+
+sim_bcrw <- function(id, # Current individual ID
+                     n_steps, # Number of steps to simulate
+                     sl_par, # Parameters of Weibull distribution
+                     rho, # Movement autocorrelation parameter
+                     start_loc, # Coordinates of the starting location
+                     beta, # Bias
+                     prange, # Perceptual range in m
+                     lands, # Raster of habitat quality
+                     neighbors # Cell neighborhoods
+                     ){
+  
+  require(dplyr)
+  
+  if (is.na(prange)) {
+    # Default perceptual range is 95% quantile of step length distribution
+    prange <- quantile(rweibull(10000, sl_par[1], sl_par[2]), 0.95)
+  }
+  
+  # Jitter starting points
+  x <- c()
+  x[1] <- runif(n = 1, 
+                min = start_loc$x - 20000, 
+                max = start_loc$x + 20000)
+  y <- c()
+  y[1] <- runif(n = 1, 
+                min = start_loc$y - 20000, 
+                max = start_loc$y + 20000)
+  
+  # Initialize output: data frame of coordinates, start with first location
+  out <- data.frame(x = x, y = y)
+  
+  # Need to initialize first step before starting the loop. 
+  
+  # Initialize vector of bearings
+  bbias <- c()
+  
+  # To calculate first bearing:
+  # 1. Get cell ID of starting point.
+  start_cell <- raster::cellFromXY(lands, 
+                           xy = c(out[, 1], 
+                                  out[, 2]))
+  
+  # 2. Get coordinates of neighbors of current position.
+  mat <- raster::xyFromCell(lands, neighbors[[start_cell]])
+  # Store the position of the current cell in the vector of neighbors
+  pos <- which(neighbors[[start_cell]] == start_cell)
+  
+  # 3. Calculate distance of each cell in the neighborhood to the current position
+  # Select distances to that among all pairwise distances
+  dists <- as.matrix(dist(mat))[pos, ]  
+  # Filter points within the perceptual range
+  within_prange <- mat[which(dists < prange), ]
+  # Get the cell numbers for these points
+  cells <- neighbors[[start_cell]][which(dists < prange)]
+  # Extract habitat values
+  val <- raster::extract(lands, cells)
+  # Get distances
+  dist <- dists[which(dists < prange)]
+  # Rank cells in the neighborhood based on best habitat value and lower distance
+  # and select the top
+  end_point <- cbind.data.frame(within_prange, cells, val, dist) %>% 
+  # exclude the current position or the animal won't move
+    filter(cells != start_cell) %>% 
+    arrange(desc(val), dist) %>% 
+    slice(1)
+  
+  # 4. Calculate the bearing from the current position to the attraction cell
+  dx <- end_point[, 1] - out[[1]]
+  dy <- end_point[, 2] - out[[2]]
+  bbias[1] <- atan2(y = dy, x = dx)
+  
+  # 5. Randomize the starting direction
+  start_angle <- as.numeric(circular::rwrappedcauchy(n = 1))
+  
+  # 6. Initialize other vectors
+  # Delta y and x components of the angle for a unit turn
+    ya <- c() # This is the expected delta y if the step had length 1
+    ya[1] <- (1 - beta) * sin(start_angle) + beta * sin(bbias[1])
+    xa <- c() # This is the expected delta x if the step had length 1
+    xa[1] <- (1 - beta) * cos(start_angle) + beta * cos(bbias[1])
+  
+  # 7. Derive expected angle from delta x and y 
+  # (based on bias alone, no directional persistence)
+  ta <- c()
+  ta[1] <- atan2(y = ya[1], x = xa[1]) 
+  
+  # 8. Initialize vector of simulated angles accounting for directional persistence and bias
+  angles <- c() 
+  # For step 1, we have no directional persistence because there's no previous step
+  # So angle[1] and ta[1] are the same
+  angles[1] <- ta[1]
+  
+  # 9. Draw value of first step
+    steps <- c()
+    steps[1] <- rweibull(n = 1, shape = sl_par[1], scale = sl_par[2])
+  
+  # 10. Calculate coordinates of end point
+  xy_end <- end_coords(steps[1], angles[1], x[1], y[1])
+  x[2] <- xy_end[, 1]
+  y[2] <- xy_end[, 2]
+  
+  # Loop over steps from the second step onward
+  for (t in 2:(n_steps + 1)) {
+    
+    # 1. Identify patch of attraction
+    cell <- raster::cellFromXY(lands, c(x[t], y[t]))
+    mat <- raster::xyFromCell(lands, neighbors[[cell]])
+    pos <- which(neighbors[[cell]] == cell)
+    dists <- as.matrix(dist(mat))[pos, ]
+    within_prange <- mat[which(dists < prange), ]
+    cells <- neighbors[[cell]][which(dists < prange)]
+    val <- raster::extract(lands, cells)
+    dist <- dists[which(dists < prange)]
+    end_point <- cbind.data.frame(within_prange, cells, val, dist) %>% 
+        filter(cells != cell) %>% 
+        arrange(desc(val), dist) %>% 
+        slice(1)
+    dx <- end_point[, 1] - x[t]
+    dy <- end_point[, 2] - y[t]
+    bbias[t] <- atan2(y = dy, x = dx)
+    ya[t] <- (1 - beta) * sin(ta[t - 1]) + beta * sin(bbias[t])
+    xa[t] <- (1 - beta) * cos(ta[t - 1]) + beta * cos(bbias[t])
+    ta[t] <- atan2(y = ya[t], x = xa[t])
+    angles[t] <- CircStats::rwrpcauchy(n = 1, location = ta[t], rho = rho)
+    steps[t] <- rweibull(n = 1, shape = sl_par[1], scale = sl_par[2])
+    
+    # 5. Get coordinates of end point
+    xy_end <- end_coords(steps[t], angles[t], x[t], y[t])
+    x[t+1] <- xy_end[, 1]
+    y[t+1] <- xy_end[, 2]
+  
+    # Censor animal if it walks off of the landscape
+    if (is.na(raster::cellFromXY(lands, c(x[t + 1], y[t + 1])))) { break }
+    
+  } 
+  
+  out <- data.frame(x = x, y = y)
+    
+  out$id <- id
+  out$step <- 0:(n_steps + 1)
+  out$rho <- rho
+  out$boundary_size <- NA
+  out$habitat_effect <- NA
+  out$landscape <- attributes(lands)$file@name
+  out$beta <- beta
+  
+  return(out)
+  
+}
