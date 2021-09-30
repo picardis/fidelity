@@ -2,7 +2,6 @@
 #'
 #' Simulate a movement track with a Correlated Random Walk model.
 #'
-#' @param id Numeric. Current individual ID
 #' @param n_steps Numeric. Number of steps to simulate
 #' @param sl_par Vector of length 2 containing the shape and scale of the step
 #' length distribution (Weibull)
@@ -11,11 +10,11 @@
 #' (columns named x and y)
 #' @return A data frame containing the coordinates of each location along the
 #' simulated track and the associated simulation parameter values.
-sim_crw <- function(id,
-                    n_steps,
+sim_crw <- function(n_steps,
                     sl_par,
                     rho,
-                    start_loc
+                    start_loc = data.frame(x = 0, y = 0),
+                    scenario_id = NA
                     ) {
 
   # Draw steps
@@ -35,13 +34,15 @@ sim_crw <- function(id,
   out <- data.frame(x = x, y = y)
 
   # Add remaining parameters
-  out$id <- id
   out$step <- 0:(n_steps + 1)
   out$rho <- rho
   out$boundary_size <- NA
   out$habitat_effect <- NA
   out$landscape <- NA
   out$beta <- NA
+  if (!is.na(scenario_id)) {
+    out$scenario_id <- scenario_id
+    }
 
   return(out)
 }

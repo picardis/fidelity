@@ -3,12 +3,12 @@
 #' Description
 #' @inheritParams sim_crw
 #' @param boundary_size Size of the boundary in m. Numeric value
-sim_ccrw <- function(id,
-                     n_steps,
+sim_ccrw <- function(n_steps,
                      sl_par,
                      rho,
-                     start_loc,
-                     boundary_size
+                     boundary_size,
+                     start_loc = data.frame(x = 0, y = 0),
+                     scenario_id = NA
                      ) {
 
   # Initialize output
@@ -24,8 +24,7 @@ sim_ccrw <- function(id,
                     as.numeric(circular::rwrappedcauchy(1,
                                                         circular::circular(0),
                                                         rho,
-                                                        control.circular = list(
-                                                          units = "radians")))))
+                                                        control.circular=list(units="radians")))))
 
     x <- out$x[s - 1] + cos(angles) * steps
     y <- out$y[s - 1] + sin(angles) * steps
@@ -37,8 +36,7 @@ sim_ccrw <- function(id,
                       as.numeric(circular::rwrappedcauchy(1,
                                                           circular::circular(0),
                                                           rho,
-                                                          control.circular = list(
-                                                            units="radians")))))
+                                                          control.circular=list(units="radians")))))
       x <- out$x[s - 1] + cos(angles) * steps
       y <- out$y[s - 1] + sin(angles) * steps
 
@@ -48,13 +46,15 @@ sim_ccrw <- function(id,
     out <- rbind(out, data.frame(x = x, y = y))
   }
 
-  out$id <- id
   out$step <- 0:(n_steps + 1)
   out$rho <- rho
   out$boundary_size <- boundary_size
   out$habitat_effect <- NA
   out$landscape <- NA
   out$beta <- NA
+  if (!is.na(scenario_id)) {
+    out$scenario_id <- scenario_id
+  }
 
   return(out)
 
