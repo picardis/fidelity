@@ -83,7 +83,8 @@ simulate_tracks <- function(
                   habitat_effect = as.numeric(x["habitat_effect"]),
                   scenario_id = x["scenario_id"],
                   lands = rast,
-                  start_loc = start_loc)}))
+                  start_loc = start_loc,
+                  lands_name = x["lands"])}))
 
         sims_id <- cbind.data.frame(id = i, sims_id)
 
@@ -105,7 +106,7 @@ simulate_tracks <- function(
 
     if (is.na(prange)) {
       prange <- quantile(rweibull(100000, sl_par[1], sl_par[2]), 0.95)
-      warning("Perceptual range unspecified,
+      message("Perceptual range unspecified,
       using 95th percentile of step length distribution")
     }
 
@@ -137,7 +138,10 @@ simulate_tracks <- function(
                 beta = as.numeric(x["beta"]),
                 scenario_id = x["scenario_id"],
                 lands = rast,
-                start_loc = start_loc)}))
+                start_loc = start_loc,
+                prange = prange,
+                neighbors = neighbors,
+                lands_name = x["lands"])}))
 
       sims_id <- cbind.data.frame(id = i, sims_id)
 

@@ -8,7 +8,8 @@ sim_bcrw <- function(n_steps, # Number of steps to simulate
                      prange, # Perceptual range in m
                      lands, # Raster of habitat quality
                      neighbors, # Cell neighborhoods
-                     scenario_id = NA
+                     scenario_id = NA,
+                     lands_name = NA
                      ){
 
   if (is.na(prange)) {
@@ -138,11 +139,9 @@ sim_bcrw <- function(n_steps, # Number of steps to simulate
   out$rho <- rho
   out$boundary_size <- NA
   out$habitat_effect <- NA
-  out$landscape <- attributes(lands)$file@name
   out$beta <- beta
-  if (!is.na(scenario_id)) {
-    out$scenario_id <- scenario_id
-  }
+  out$landscape <- lands_name
+  out$scenario_id <- scenario_id
 
   return(out)
 

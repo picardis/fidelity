@@ -6,7 +6,8 @@ sim_mcrw <- function(n_steps, # Number of steps to simulate
                      start_loc, # Coordinates of the starting location
                      habitat_effect, # Strength of habitat response
                      lands, # Raster of habitat quality
-                     scenario_id = NA
+                     scenario_id = NA,
+                     lands_name = NA
                      ) {
 
   # Jitter starting points
@@ -63,11 +64,10 @@ sim_mcrw <- function(n_steps, # Number of steps to simulate
   out$rho <- rho
   out$boundary_size <- NA
   out$habitat_effect <- habitat_effect
-  out$landscape <- attributes(lands)$file@name
   out$beta <- NA
-  if (!is.na(scenario_id)) {
-    out$scenario_id <- scenario_id
-  }
+  out$beta <- NA
+  out$landscape <- lands_name
+  out$scenario_id <- scenario_id
 
   return(out)
 

@@ -38,11 +38,9 @@ sim_crw <- function(n_steps,
   out$rho <- rho
   out$boundary_size <- NA
   out$habitat_effect <- NA
-  out$landscape <- NA
   out$beta <- NA
-  if (!is.na(scenario_id)) {
-    out$scenario_id <- scenario_id
-    }
+  out$landscape <- NA
+  out$scenario_id <- scenario_id
 
   return(out)
 }
