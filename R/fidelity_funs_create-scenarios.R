@@ -1,3 +1,4 @@
+# Insert roxygen header here
 create_scenarios_crw <- function(
   rho
   ) {
@@ -22,6 +23,7 @@ create_scenarios_crw <- function(
 
 }
 
+# Insert roxygen header here
 create_scenarios_ccrw <- function(
   rho,
   boundary_size
@@ -48,6 +50,7 @@ create_scenarios_ccrw <- function(
 
 }
 
+# Insert roxygen header here
 create_scenarios_mcrw <- function(
   rho,
   habitat_effect,
@@ -80,6 +83,7 @@ create_scenarios_mcrw <- function(
 
 }
 
+# Insert roxygen header here
 create_scenarios_bcrw <- function(
   rho,
   beta,

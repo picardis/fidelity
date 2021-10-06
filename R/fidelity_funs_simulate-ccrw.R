@@ -1,8 +1,9 @@
 #' Simulate Constrained Correlated Random Walk (CCRW)
 #'
-#' Description
+#' Insert description
 #' @inheritParams sim_crw
 #' @param boundary_size Size of the boundary in m. Numeric value
+#' @export
 sim_ccrw <- function(n_steps,
                      sl_par,
                      rho,

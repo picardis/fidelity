@@ -7,7 +7,7 @@ sim_mcrw <- function(n_steps, # Number of steps to simulate
                      habitat_effect, # Strength of habitat response
                      lands, # Raster of habitat quality
                      scenario_id = NA,
-                     lands_name = NA
+                     lands_name = NA # Path to the landscape file
                      ) {
 
   # Jitter starting points

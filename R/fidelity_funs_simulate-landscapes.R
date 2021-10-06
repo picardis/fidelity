@@ -9,6 +9,7 @@
 #' @param constancy Vector of constancy values to simulate.
 #' @param clumpiness Vector of clumpiness values to simulate.
 #' @return \code{Raster} or \code{RasterStack} of simulated landscapes.
+#' @export
 sim_land <- function(res,
                      ext,
                      orig,

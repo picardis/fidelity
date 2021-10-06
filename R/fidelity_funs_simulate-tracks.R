@@ -1,7 +1,9 @@
 #' Simulate movement tracks
 #'
-#' \code{simulate_tracks} is a wrapper function to simulate tracks for multiple
-#' scenarios from one or multiple movement models.
+#' \code{simulate_tracks} is a wrapper function to simulate multiple tracks for
+#' multiple scenarios (which can include multiple movement models).
+#' @params scenarios
+#' @params n_tracks
 simulate_tracks <- function(
   scenarios, # Output of the create_scenarios() functions (one or multiple rbind together)
   n_steps,     # Number of steps to simulate

@@ -8,13 +8,16 @@
 #' @param rho Numeric. Movement autocorrelation parameter
 #' @param start_loc Data frame with coordinates of the starting location
 #' (columns named x and y)
+#' @param scenario_id Optional ID of the current scenario. Automatically assigned
+#' when using simulate_tracks().
 #' @return A data frame containing the coordinates of each location along the
 #' simulated track and the associated simulation parameter values.
+#' @export
 sim_crw <- function(n_steps,
                     sl_par,
                     rho,
                     start_loc = data.frame(x = 0, y = 0),
-                    scenario_id = NA
+                    scenario_id = NA # Scenario identifier (structure: mod_num)
                     ) {
 
   # Draw steps
