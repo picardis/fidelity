@@ -1,15 +1,8 @@
 #' Simulate Correlated Random Walk (CRW)
 #'
-#' Simulate a movement track with a Correlated Random Walk model.
+#' \code{sim_crw} simulates a movement track with a Correlated Random Walk model.
 #'
-#' @param n_steps Numeric. Number of steps to simulate
-#' @param sl_par Vector of length 2 containing the shape and scale of the step
-#' length distribution (Weibull)
-#' @param rho Numeric. Movement autocorrelation parameter
-#' @param start_loc Data frame with coordinates of the starting location
-#' (columns named x and y)
-#' @param scenario_id Optional ID of the current scenario. Automatically assigned
-#' when using simulate_tracks().
+#' @inheritParams sim_bcrw
 #' @return A data frame containing the coordinates of each location along the
 #' simulated track and the associated simulation parameter values.
 #' @export

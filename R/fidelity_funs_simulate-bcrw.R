@@ -1,13 +1,32 @@
-# Simulate Biased Correlated Random Walk (BCRW)
+#' Simulate Biased Correlated Random Walk (BCRW)
+#'
+#' \code{sim_bcrw} simulates a movement track with a Biased Correlated Random Walk model.
+#'
+#' @param n_steps Numeric. Number of steps to simulate
+#' @param sl_par Vector of length 2 containing the shape and scale of the step
+#' length distribution (Weibull)
+#' @param rho Numeric. Movement autocorrelation parameter
+#' @param start_loc Data frame with coordinates of the starting location
+#' (columns named x and y). 0, 0 if unprojected.
+#' @param beta Numeric. Bias applied to the Biased Correlated Random Walk
+#' @param prange Numeric. Perceptual range radius (m) for BCRW.
+#' @param lands \code{Raster} of habitat quality (landscape)
+#' @param neighbors \code{Raster} of the distance to neighboring cells (neighborhoods) OR Path to file of cell neighborhoods for BCRW
+#' @param scenario_id Numeric. Optional ID of the current scenario. Automatically assigned
+#' when using simulate_tracks().
+#' @param lands_name Path to the landscape file
+#' @return Returns a data frame containing the coordinates of each location along the
+#' simulated track and the associated simulation parameter values.
+#' @export
 
-sim_bcrw <- function(n_steps, # Number of steps to simulate
-                     sl_par, # Parameters of Weibull distribution
-                     rho, # Movement autocorrelation parameter
-                     start_loc, # Coordinates of the starting location
-                     beta, # Bias
-                     prange, # Perceptual range in m
-                     lands, # Raster of habitat quality
-                     neighbors, # Cell neighborhoods
+sim_bcrw <- function(n_steps,
+                     sl_par,
+                     rho,
+                     start_loc,
+                     beta,
+                     prange,
+                     lands,
+                     neighbors,
                      scenario_id = NA,
                      lands_name = NA
                      ){

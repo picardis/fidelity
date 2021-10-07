@@ -1,4 +1,13 @@
-# Insert roxygen header here
+#' Create Correlated Random Walk Scenario(s) (CRW)
+#'
+#' \code{create_scenarios_crw} generates Correlated Random Walk scenario(s).
+#'
+#' @inheritParams sim_bcrw
+#' @inheritParams sim_ccrw
+#' @inheritParams sim_mcrw
+#' @return Returns a data frame of all the possible Correlated Random Walk Scenario(s) based on rho values. Na is applied to Boundary_size, habitat_effect, beta, and lands.
+#' @export
+
 create_scenarios_crw <- function(
   rho
   ) {
@@ -23,7 +32,16 @@ create_scenarios_crw <- function(
 
 }
 
-# Insert roxygen header here
+#'  Create Constrained Correlated Random Walk Scenario(s) (CCRW)
+#'
+#' \code{create_scenarios_ccrw} generates Constrained Correlated Random Walk scenario(s).
+#'
+#' @inheritParams sim_bcrw
+#' @inheritParams sim_ccrw
+#' @inheritParams sim_mcrw
+#' @return Returns a data frame of all the possible Constrained Correlated Random Walk Scenario(s) based on rho and boundary size values. Na is applied to habitat_effect, beta, and lands.
+#' @export
+
 create_scenarios_ccrw <- function(
   rho,
   boundary_size
@@ -50,7 +68,16 @@ create_scenarios_ccrw <- function(
 
 }
 
-# Insert roxygen header here
+#'  Create Mixture Correlated Random Walk Scenario(s) (MCRW)
+#'
+#' \code{create_scenarios_mcrw} generates Mixture Correlated Random Walk scenario(s).
+#'
+#' @inheritParams sim_bcrw
+#' @inheritParams sim_ccrw
+#' @inheritParams sim_mcrw
+#' @return Returns a data frame of all the possible Mixture Correlated Random Walk Scenario(s) based on rho, habitat effect, and lands values. Na is applied to boundary size and beta.
+#' @export
+
 create_scenarios_mcrw <- function(
   rho,
   habitat_effect,
@@ -83,7 +110,16 @@ create_scenarios_mcrw <- function(
 
 }
 
-# Insert roxygen header here
+#'  Create Biased Correlated Random Walk Scenario(s) (BCRW)
+#'
+#' \code{create_scenarios_mcrw} generates Biased Correlated Random Walk scenario(s).
+#'
+#' @inheritParams sim_bcrw
+#' @inheritParams sim_ccrw
+#' @inheritParams sim_mcrw
+#' @return Returns a data frame of all the possible Biased Correlated Random Walk Scenario(s) based on rho, beta, and lands values. Na is applied to boundary size and habitat effect.
+#' @export
+
 create_scenarios_bcrw <- function(
   rho,
   beta,

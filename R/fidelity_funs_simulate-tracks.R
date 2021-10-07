@@ -2,17 +2,22 @@
 #'
 #' \code{simulate_tracks} is a wrapper function to simulate multiple tracks for
 #' multiple scenarios (which can include multiple movement models).
-#' @params scenarios
-#' @params n_tracks
+#'
+#' @param scenarios Data frame. Output of the create_scenarios() functions (one or multiple rbind together)
 #' @inheritParams sim_bcrw
+#' @param n_tracks Numeric. Number of tracks to simulate.
+#' @return Returns a data frame containing the coordinates of each location along the
+#' simulated track of multiple scenarios (including multiple movement models) and the associated simulation parameter values.
+#' @export
+
 simulate_tracks <- function(
-  scenarios, # Output of the create_scenarios() functions (one or multiple rbind together)
-  n_steps,     # Number of steps to simulate
-  n_tracks,        # Number of tracks to simulate
-  start_loc = data.frame(x = 0, y = 0), # Center of the raster (0, 0 if unprojected)
-  sl_par,   # Shape and scale of Weibull distribution for step length
-  prange = NA, # Perceptual range radius (m) for BCRW
-  neighbors = NA # Path to file of cell neighborhoods for BCRW
+  scenarios,
+  n_steps,
+  n_tracks,
+  start_loc = data.frame(x = 0, y = 0),
+  sl_par,
+  prange = NA,
+  neighbors = NA
 ){
 
   # (C)RW ####

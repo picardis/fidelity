@@ -1,9 +1,14 @@
 #' Simulate Constrained Correlated Random Walk (CCRW)
 #'
+#' \code{sim_ccrw} simulates a movement track with a Constrained Correlated Random Walk model.
+#'
 #' Insert description
-#' @inheritParams sim_crw
+#' @inheritParams sim_bcrw
 #' @param boundary_size Size of the boundary in m. Numeric value
+#' @return Returns a data frame containing the coordinates of each location along the
+#' simulated track and the associated simulation parameter values.
 #' @export
+
 sim_ccrw <- function(n_steps,
                      sl_par,
                      rho,
