@@ -8,7 +8,6 @@
 #' @return Returns a data frame containing the coordinates of each location along the
 #' simulated track and the associated simulation parameter values.
 #' @export
-
 sim_ccrw <- function(n_steps,
                      sl_par,
                      rho,

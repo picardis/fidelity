@@ -5,32 +5,37 @@
 \title{Simulate movement tracks}
 \usage{
 simulate_tracks(
+  scenarios,
+  n_steps,
+  n_tracks,
   start_loc = data.frame(x = 0, y = 0),
-  sl_par = c(NA, NA),
-  n_steps = NA,
-  n_tracks = NA,
-  rho = NA,
-  boundary_size = NA,
-  lands = NA,
-  habitat_effect = NA,
-  beta = NA,
+  sl_par,
   prange = NA,
-  neighbors = NA,
-  model = "all"
+  neighbors = NA
 )
 }
 \arguments{
+\item{scenarios}{Data frame. Output of the create_scenarios() functions (one or multiple rbind together)}
+
+\item{n_steps}{Numeric. Number of steps to simulate}
+
+\item{n_tracks}{Numeric. Number of tracks to simulate.}
+
 \item{start_loc}{Data frame with coordinates of the starting location
-(columns named x and y)}
+(columns named x and y). 0, 0 if unprojected.}
 
 \item{sl_par}{Vector of length 2 containing the shape and scale of the step
 length distribution (Weibull)}
 
-\item{n_steps}{Numeric. Number of steps to simulate}
+\item{prange}{Numeric. Perceptual range radius (m) for BCRW.}
 
-\item{rho}{Numeric. Movement autocorrelation parameter}
+\item{neighbors}{\code{Raster} of the distance to neighboring cells (neighborhoods) OR Path to file of cell neighborhoods for BCRW}
+}
+\value{
+Returns a data frame containing the coordinates of each location along the
+simulated track of multiple scenarios (including multiple movement models) and the associated simulation parameter values.
 }
 \description{
-\code{simulate_tracks} is a wrapper function to simulate tracks from multiple
-movement models.
+\code{simulate_tracks} is a wrapper function to simulate multiple tracks for
+multiple scenarios (which can include multiple movement models).
 }

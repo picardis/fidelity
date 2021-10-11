@@ -7,7 +7,6 @@
 #' @inheritParams sim_mcrw
 #' @return Returns a data frame of all the possible Correlated Random Walk Scenario(s) based on rho values. Na is applied to Boundary_size, habitat_effect, beta, and lands.
 #' @export
-
 create_scenarios_crw <- function(
   rho
   ) {

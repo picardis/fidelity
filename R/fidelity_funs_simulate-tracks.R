@@ -9,7 +9,6 @@
 #' @return Returns a data frame containing the coordinates of each location along the
 #' simulated track of multiple scenarios (including multiple movement models) and the associated simulation parameter values.
 #' @export
-
 simulate_tracks <- function(
   scenarios,
   n_steps,
