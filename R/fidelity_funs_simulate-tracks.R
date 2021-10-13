@@ -117,10 +117,6 @@ simulate_tracks <- function(
       using 95th percentile of step length distribution")
     }
 
-    if (is.na(neighbors)) {
-      stop("Path to cell neighborhoods file is missing")
-    }
-
     tmp <- data.frame()
 
     for (l in 1:length(unique(scen_bcrw$lands))) {
@@ -129,12 +125,6 @@ simulate_tracks <- function(
 
     # Load raster
     rast <- raster::readAll(raster::raster(as.character(unique(scen_bcrw$lands)[l])))
-
-    # Load cell neighborhoods
-    neighbors <- tryCatch(readRDS(as.character(neighbors)),
-                          error = function(e) {
-                            paste0("Could not load ", neighbors_path)
-                            })
 
     for (i in 1:n_tracks) {
 

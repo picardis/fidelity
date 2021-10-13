@@ -29,7 +29,7 @@ length distribution (Weibull)}
 
 \item{prange}{Numeric. Perceptual range radius (m) for BCRW.}
 
-\item{neighbors}{\code{Raster} of the distance to neighboring cells (neighborhoods) OR Path to file of cell neighborhoods for BCRW}
+\item{neighbors}{\code{Raster} of the distance to neighboring cells (neighborhoods)}
 }
 \value{
 Returns a data frame containing the coordinates of each location along the

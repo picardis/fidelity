@@ -34,7 +34,7 @@ length distribution (Weibull)}
 
 \item{lands}{\code{Raster} of habitat quality (landscape)}
 
-\item{neighbors}{\code{Raster} of the distance to neighboring cells (neighborhoods) OR Path to file of cell neighborhoods for BCRW}
+\item{neighbors}{\code{Raster} of the distance to neighboring cells (neighborhoods)}
 
 \item{scenario_id}{Numeric. Optional ID of the current scenario. Automatically assigned
 when using simulate_tracks().}

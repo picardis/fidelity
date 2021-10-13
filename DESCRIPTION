@@ -10,9 +10,9 @@ License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    dplyr,
+    circular
+Suggests: 
     raster,
-    circular,
     CircStats,
     sp,
     RandomFields,

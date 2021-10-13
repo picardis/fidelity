@@ -11,7 +11,7 @@
 #' @param beta Numeric. Bias applied to the Biased Correlated Random Walk
 #' @param prange Numeric. Perceptual range radius (m) for BCRW.
 #' @param lands \code{Raster} of habitat quality (landscape)
-#' @param neighbors \code{Raster} of the distance to neighboring cells (neighborhoods) OR Path to file of cell neighborhoods for BCRW
+#' @param neighbors \code{Raster} of the distance to neighboring cells (neighborhoods)
 #' @param scenario_id Numeric. Optional ID of the current scenario. Automatically assigned
 #' when using simulate_tracks().
 #' @param lands_name Path to the landscape file
