@@ -14,10 +14,10 @@ sim_crw <- function(n_steps,
                     ) {
 
   # Draw steps
-  steps <- rweibull(n_steps + 1, sl_par[1], sl_par[2])
+  steps <- rweibull(n_steps, sl_par[1], sl_par[2])
   # Draw angles
   angles <- cumsum(c(runif(1, 0, 2 * pi),
-                 as.numeric(circular::rwrappedcauchy(n_steps,
+                 as.numeric(circular::rwrappedcauchy(n_steps - 1,
                                            circular::circular(0),
                                            rho,
                                            control.circular=list(units="radians")))))
@@ -30,7 +30,7 @@ sim_crw <- function(n_steps,
   out <- data.frame(x = x, y = y)
 
   # Add remaining parameters
-  out$step <- 0:(n_steps + 1)
+  out$step <- 0:n_steps
   out$rho <- rho
   out$boundary_size <- NA
   out$habitat_effect <- NA

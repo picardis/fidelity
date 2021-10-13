@@ -118,7 +118,7 @@ sim_bcrw <- function(n_steps,
   y[2] <- xy_end[, 2]
 
   # Loop over steps from the second step onward
-  for (t in 2:(n_steps + 1)) {
+  for (t in 2:n_steps) {
 
     # 1. Identify patch of attraction
     cell <- raster::cellFromXY(lands, c(x[t], y[t]))
@@ -153,7 +153,7 @@ sim_bcrw <- function(n_steps,
 
   out <- data.frame(x = x, y = y)
 
-  out$step <- 0:(n_steps + 1)
+  out$step <- 0:n_steps
   out$rho <- rho
   out$boundary_size <- NA
   out$habitat_effect <- NA

@@ -36,7 +36,7 @@ sim_mcrw <- function(n_steps,
   angles <- c()
   angles[1] <- runif(1, 0, 2 * pi)
 
-  for(s in 2:(n_steps + 2)) {
+  for(s in 2:(n_steps + 1)) {
 
     sl_multiplier <- 10 * habitat_effect
     new_shape <- qual[s - 1] * sl_multiplier * sl_par[2]
@@ -67,7 +67,7 @@ sim_mcrw <- function(n_steps,
 
      }
 
-  out$step <- 0:(n_steps + 1)
+  out$step <- 0:n_steps
   out$rho <- rho
   out$boundary_size <- NA
   out$habitat_effect <- habitat_effect

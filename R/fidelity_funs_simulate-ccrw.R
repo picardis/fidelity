@@ -22,7 +22,7 @@ sim_ccrw <- function(n_steps,
   # Draw a random angle to start with
   prev_angle <- runif(1, 0, 2 * pi)
 
-  for(s in 2:(n_steps + 2)) {
+  for(s in 2:(n_steps + 1)) {
 
     steps <- rweibull(1, sl_par[1], sl_par[2])
     angles <- sum(c(prev_angle,
@@ -51,7 +51,7 @@ sim_ccrw <- function(n_steps,
     out <- rbind(out, data.frame(x = x, y = y))
   }
 
-  out$step <- 0:(n_steps + 1)
+  out$step <- 0:n_steps
   out$rho <- rho
   out$boundary_size <- boundary_size
   out$habitat_effect <- NA
