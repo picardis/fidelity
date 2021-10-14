@@ -178,7 +178,7 @@ simulate_tracks <- function(
 
     if (nrow(scen_crw) > 0) {
 
-      parallel::parLapply(cl = cl,
+      res <- do.call("rbind", parallel::parLapply(cl = cl,
                           X = 1:n_tracks,
                           fun = function(track) {
                             sims_id <- do.call("rbind",
@@ -190,8 +190,9 @@ simulate_tracks <- function(
 
                             sims_id <- cbind.data.frame(id = track, sims_id)
 
-                            out <- rbind(out, sims_id)
-                          })
+                          }))
+
+      out <- rbind(out, res)
 
     }
 
@@ -201,7 +202,7 @@ simulate_tracks <- function(
 
     if (nrow(scen_ccrw) > 0) {
 
-      parallel::parLapply(cl = cl,
+      res <- do.call("rbind", parallel::parLapply(cl = cl,
                           X = 1:n_tracks,
                           fun = function(track) {
 
@@ -214,9 +215,9 @@ simulate_tracks <- function(
 
         sims_id <- cbind.data.frame(id = track, sims_id)
 
-        out <- rbind(out, sims_id)
+                          }))
 
-                          })
+      out <- rbind(out, res)
 
     }
 
@@ -235,7 +236,7 @@ simulate_tracks <- function(
         # Load raster
         rast <- raster::readAll(raster::raster(as.character(unique(scen_mcrw$lands)[l])))
 
-        parallel::parLapply(cl = cl,
+        res <- do.call("rbind", parallel::parLapply(cl = cl,
                             X = 1:n_tracks,
                             fun = function(track) {
 
@@ -253,11 +254,11 @@ simulate_tracks <- function(
 
           tmp <- rbind(tmp, sims_id)
 
-        })
+        }))
 
       }
 
-      out <- rbind(out, tmp)
+      out <- rbind(out, res)
 
     }
 
@@ -282,7 +283,7 @@ simulate_tracks <- function(
         # Load raster
         rast <- raster::readAll(raster::raster(as.character(unique(scen_bcrw$lands)[l])))
 
-        parallel::parLapply(cl = cl,
+        res <- do.call("rbind", parallel::parLapply(cl = cl,
                             X = 1:n_tracks,
                             fun = function(track) {
 
@@ -302,11 +303,11 @@ simulate_tracks <- function(
 
           tmp <- rbind(tmp, sims_id)
 
-        })
+        }))
 
       }
 
-      out <- rbind(out, tmp)
+      out <- rbind(out, res)
 
     }
 
