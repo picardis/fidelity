@@ -8,10 +8,11 @@ simulate_tracks(
   scenarios,
   n_steps,
   n_tracks,
-  start_loc = data.frame(x = 0, y = 0),
+  start_loc,
   sl_par,
   prange = NA,
-  neighbors = NA
+  neighbors = NA,
+  cl = NULL
 )
 }
 \arguments{
