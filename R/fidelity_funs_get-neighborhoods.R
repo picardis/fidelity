@@ -1,3 +1,11 @@
+#' Get Neighborhoods
+#'
+#' \code{get_neighbors} creates a vector of neighbors in the perceptual range for each cell in a landscape.
+#'
+#' @inheritParams sim_bcrw
+#' @return Returns a list of the number of neighbors within the perceptual range for each cell in a landscape
+#' @export
+
 get_neighbors <- function(lands,
                           prange) {
 

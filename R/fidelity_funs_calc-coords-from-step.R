@@ -4,7 +4,7 @@
 #'
 #' Code adapted from https://rdrr.io/github/ptompalski/UsefulRFunctions/src/R/circular2xy.R
 #' @param step Numeric. The step length in meters (m)
-#' @param angle Numeric. The turning angle (degrees or radians?)
+#' @param angle Numeric. The turning angle in degrees
 #' @param start_x Numeric. The X coordinate of the start location (UTM)
 #' @param start_y Numeric. The Y coordinate of the start location (UTM)
 #' @return A data frame containing the end points coordinates from the step and turning angle input.
