@@ -1,13 +1,18 @@
-# Function to calculate returns on multiple tracks
-calc_returns <- function(tracks, # Movement tracks (e.g., in output from
-                         # simulate_tracks(), or a set of real tracks).
-                         # A data.frame with (at a minimum) id, x, y, step.
-                         dist, # Maximum distance to be considered a return
-                         lag, # Vector of fidelity lags (one or more)
-                         window = Inf # Duration of the fidelity window
-                         # (Inf if from the start of the track, an integer if
-                         # shorter (e.g., 42 locations, which is a week at 6h
-                         # resolution))
+#' Calculate Returns (Multiple)
+#'
+#' \code{calc_returns} Function to calculate returns on multiple tracks based on temporal and spatial restrictions.
+#'
+#' @param tracks Data frame of movement tracks (e.g., output from simulate_tracks(), or a set of real tracks) with at minimum columns for id, x, y, and step.
+#' @param dist Numeric. Maximum distance (UNIT...m?) to be considered a return
+#' @param lag Vector of fidelity lags (one or more)
+#' @param window # Duration of the fidelity window (Inf if from the start of the track, an integer if shorter (e.g., 42 locations, which is a week at 6h resolution). Default is Inf.
+#' @return Data frame of movement tracks containing an additional column indicating a return (1 = return, 0 = no return) for each lag.
+#' @export
+
+calc_returns <- function(tracks,
+                         dist,
+                         lag,
+                         window = Inf
                          ) {
 
   # Check if tracks is the output of simulate_tracks()
@@ -32,7 +37,16 @@ calc_returns <- function(tracks, # Movement tracks (e.g., in output from
 
 }
 
-# Function to calculate returns for a single track
+
+#' Calculate Returns (Single)
+#'
+#' \code{calc_ret_track} Function to calculate returns for a single track based on temporal and spatial restrictions.
+#'
+#' @param tracks Data frame of a movement track (e.g., output from simulate_tracks(), or a set of real tracks) with at minimum columns for id, x, y, and step.
+#' @inheritParams calc_returns
+#' @return Data frame of a movement track containing an additional column indicating a return (1 = return, 0 = no return) for each lag.
+#' @export
+
 calc_ret_track <- function(t,
                            dist,
                            lag,
