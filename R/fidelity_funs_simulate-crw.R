@@ -13,6 +13,8 @@ sim_crw <- function(n_steps,
                     scenario_id = NA # Scenario identifier (structure: mod_num)
                     ) {
 
+  if (is.na(rho)) {stop("Value of rho is NA")}
+
   # Draw steps
   steps <- rweibull(n_steps, sl_par[1], sl_par[2])
   # Draw angles

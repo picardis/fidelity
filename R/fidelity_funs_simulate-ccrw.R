@@ -16,6 +16,9 @@ sim_ccrw <- function(n_steps,
                      scenario_id = NA
                      ) {
 
+  if (is.na(rho)) {stop("Value of rho is NA")}
+  if (is.na(boundary_size)) {stop("Value of boundary_size is NA")}
+
   # Initialize output
   out <- start_loc
 

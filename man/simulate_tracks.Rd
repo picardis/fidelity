@@ -11,8 +11,7 @@ simulate_tracks(
   start_loc,
   sl_par,
   prange = NA,
-  neighbors = NA,
-  cl = NULL
+  neighbors = NA
 )
 }
 \arguments{

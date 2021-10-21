@@ -30,6 +30,9 @@ sim_bcrw <- function(n_steps,
                      lands_name = NA
                      ){
 
+  if (is.na(rho)) {stop("Value of rho is NA")}
+  if (is.na(beta)) {stop("Value of beta is NA")}
+
   if (is.na(prange)) {
     # Default perceptual range is 95% quantile of step length distribution
     prange <- quantile(rweibull(10000, sl_par[1], sl_par[2]), 0.95)
