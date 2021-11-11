@@ -22,14 +22,14 @@ simulate_tracks(
 \item{n_tracks}{Numeric. Number of tracks to simulate.}
 
 \item{start_loc}{Data frame with coordinates of the starting location
-(columns named x and y). 0, 0 if unprojected.}
+(columns named x and y). 0, 0 if unprotected.}
 
 \item{sl_par}{Vector of length 2 containing the shape and scale of the step
 length distribution (Weibull)}
 
 \item{prange}{Numeric. Perceptual range radius (m) for BCRW.}
 
-\item{neighbors}{\code{Raster} of the distance to neighboring cells (neighborhoods)}
+\item{neighbors}{\code{raster} of the distance to neighboring cells (neighborhoods)}
 }
 \value{
 Returns a data frame containing the coordinates of each location along the

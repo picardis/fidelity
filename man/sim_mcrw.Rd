@@ -24,13 +24,13 @@ length distribution (Weibull)}
 \item{rho}{Numeric. Movement autocorrelation parameter}
 
 \item{start_loc}{Data frame with coordinates of the starting location
-(columns named x and y). 0, 0 if unprojected.}
+(columns named x and y). 0, 0 if unprotected.}
 
 \item{habitat_effect}{Numeric. Strength of habitat response, values between XX-XX.}
 
-\item{lands}{\code{Raster} of habitat quality (landscape)}
+\item{lands}{\code{raster} of habitat quality (landscape)}
 
-\item{scenario_id}{Numeric. Optional ID of the current scenario. Automatically assigned
+\item{scenario_id}{Character string. Optional ID of the current scenario. Automatically assigned
 when using simulate_tracks().}
 
 \item{lands_name}{Path to the landscape file}

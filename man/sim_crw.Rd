@@ -21,9 +21,9 @@ length distribution (Weibull)}
 \item{rho}{Numeric. Movement autocorrelation parameter}
 
 \item{start_loc}{Data frame with coordinates of the starting location
-(columns named x and y). 0, 0 if unprojected.}
+(columns named x and y). 0, 0 if unprotected.}
 
-\item{scenario_id}{Numeric. Optional ID of the current scenario. Automatically assigned
+\item{scenario_id}{Character string. Optional ID of the current scenario. Automatically assigned
 when using simulate_tracks().}
 }
 \value{

@@ -9,7 +9,7 @@ end_coords(step, angle, start_x, start_y)
 \arguments{
 \item{step}{Numeric. The step length in meters (m)}
 
-\item{angle}{Numeric. The turning angle (degrees or radians?)}
+\item{angle}{Numeric. The turning angle in degrees}
 
 \item{start_x}{Numeric. The X coordinate of the start location (UTM)}
 

@@ -11,7 +11,7 @@ create_scenarios_mcrw(rho, habitat_effect, lands)
 
 \item{habitat_effect}{Numeric. Strength of habitat response, values between XX-XX.}
 
-\item{lands}{\code{Raster} of habitat quality (landscape)}
+\item{lands}{\code{raster} of habitat quality (landscape)}
 }
 \value{
 Returns a data frame of all the possible Mixture Correlated Random Walk Scenario(s) based on rho, habitat effect, and lands values. Na is applied to boundary size and beta.

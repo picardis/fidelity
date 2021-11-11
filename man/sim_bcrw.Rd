@@ -26,17 +26,17 @@ length distribution (Weibull)}
 \item{rho}{Numeric. Movement autocorrelation parameter}
 
 \item{start_loc}{Data frame with coordinates of the starting location
-(columns named x and y). 0, 0 if unprojected.}
+(columns named x and y). 0, 0 if unprotected.}
 
 \item{beta}{Numeric. Bias applied to the Biased Correlated Random Walk}
 
 \item{prange}{Numeric. Perceptual range radius (m) for BCRW.}
 
-\item{lands}{\code{Raster} of habitat quality (landscape)}
+\item{lands}{\code{raster} of habitat quality (landscape)}
 
-\item{neighbors}{\code{Raster} of the distance to neighboring cells (neighborhoods)}
+\item{neighbors}{\code{raster} of the distance to neighboring cells (neighborhoods)}
 
-\item{scenario_id}{Numeric. Optional ID of the current scenario. Automatically assigned
+\item{scenario_id}{Character string. Optional ID of the current scenario. Automatically assigned
 when using simulate_tracks().}
 
 \item{lands_name}{Path to the landscape file}

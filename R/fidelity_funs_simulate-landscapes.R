@@ -42,8 +42,8 @@ sim_land <- function(res,
                 sim <- raster::addLayer(sim, sim3)     # otherwise add a layer
                 }
 
-      names(sim)[raster::nlayers(sim)] <- paste0("const", round(contagion[i], 1), "_",
-                                         "clump", round(constancy[j], 1))
+      names(sim)[raster::nlayers(sim)] <- paste0("constancy", round(contagion[i], 1), "_",
+                                         "contagion", round(constancy[j], 1))
     }
   }
 

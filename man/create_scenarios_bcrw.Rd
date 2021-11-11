@@ -11,11 +11,11 @@ create_scenarios_bcrw(rho, beta, lands)
 
 \item{beta}{Numeric. Bias applied to the Biased Correlated Random Walk}
 
-\item{lands}{\code{Raster} of habitat quality (landscape)}
+\item{lands}{\code{raster} of habitat quality (landscape)}
 }
 \value{
 Returns a data frame of all the possible Biased Correlated Random Walk Scenario(s) based on rho, beta, and lands values. Na is applied to boundary size and habitat effect.
 }
 \description{
-\code{create_scenarios_mcrw} generates Biased Correlated Random Walk scenario(s).
+\code{create_scenarios_bcrw} generates Biased Correlated Random Walk scenario(s).
 }

@@ -4,7 +4,7 @@
 \alias{sim_land}
 \title{Function to generate simulated landscapes}
 \usage{
-sim_land(res, ext, orig, constancy, clumpiness)
+sim_land(res, ext, orig, contagion, constancy)
 }
 \arguments{
 \item{res}{Resolution of the raster in m. Numeric value.}
@@ -13,14 +13,14 @@ sim_land(res, ext, orig, constancy, clumpiness)
 
 \item{orig}{Named vector of x and y coordinates of the center of the raster.}
 
-\item{constancy}{Vector of constancy values to simulate.}
+\item{contagion}{Vector of contagion values to simulate.}
 
-\item{clumpiness}{Vector of clumpiness values to simulate.}
+\item{constancy}{Vector of constancy values to simulate.}
 }
 \value{
 \code{Raster} or \code{RasterStack} of simulated landscapes.
 }
 \description{
 \code{sim_land} generates a simulated landscape of user-specified ext,
-resolution, origin, and spatial properties (constancy and clumpiness)
+resolution, origin, and spatial properties (contagion and constancy)
 }
