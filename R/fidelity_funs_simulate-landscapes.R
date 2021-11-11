@@ -1,20 +1,20 @@
 #' Function to generate simulated landscapes
 #'
 #' \code{sim_land} generates a simulated landscape of user-specified ext,
-#' resolution, origin, and spatial properties (constancy and clumpiness)
+#' resolution, origin, and spatial properties (contagion and constancy)
 #'
 #' @param res Resolution of the raster in m. Numeric value.
 #' @param ext Extent of the raster in m. Numeric value.
 #' @param orig Named vector of x and y coordinates of the center of the raster.
+#' @param contagion Vector of contagion values to simulate.
 #' @param constancy Vector of constancy values to simulate.
-#' @param clumpiness Vector of clumpiness values to simulate.
 #' @return \code{Raster} or \code{RasterStack} of simulated landscapes.
 #' @export
 sim_land <- function(res,
                      ext,
                      orig,
-                     constancy,
-                     clumpiness
+                     contagion,
+                     constancy
 ) {
 
   land <- raster::raster(resolution = res,
@@ -25,15 +25,15 @@ sim_land <- function(res,
 
   g <- as(land, "GridTopology")
 
-  for (i in 1:length(constancy)) {
+  for (i in 1:length(contagion)) {
 
-    model <- RandomFields::RMgauss(var = 1, scale = constancy[i])
+    model <- RandomFields::RMgauss(var = 1, scale = contagion[i])
     sim2 <- RandomFields::RFsimulate(model, x = g)
 
-    for (j in 1:length(clumpiness)) {
+    for (j in 1:length(constancy)) {
 
       sim3 <- as(sim2, "RasterLayer")
-      sim3[] <- scales::rescale(raster::values(sim3), to = c(0, 1))^clumpiness[j]
+      sim3[] <- scales::rescale(raster::values(sim3), to = c(0, 1))^constancy[j]
       sim3[] <- scales::rescale(raster::values(sim3), to = c(-1, 1))
 
             if(i == 1 & j == 1) {
@@ -42,8 +42,8 @@ sim_land <- function(res,
                 sim <- raster::addLayer(sim, sim3)     # otherwise add a layer
                 }
 
-      names(sim)[raster::nlayers(sim)] <- paste0("const", round(constancy[i], 1), "_",
-                                         "clump", round(clumpiness[j], 1))
+      names(sim)[raster::nlayers(sim)] <- paste0("const", round(contagion[i], 1), "_",
+                                         "clump", round(constancy[j], 1))
     }
   }
 
