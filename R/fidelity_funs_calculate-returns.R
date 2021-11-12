@@ -94,8 +94,8 @@ calc_ret_track <- function(t,
                            window = Inf) {
 
   # Check columns
-  if (is.null(tracks$x)) {stop("Column 'x' is missing")}
-  if (is.null(tracks$y)) {stop("Column 'y' is missing")}
+  if (is.null(t$x)) {stop("Column 'x' is missing")}
+  if (is.null(t$y)) {stop("Column 'y' is missing")}
 
   n_steps <- nrow(t) - 1
 
