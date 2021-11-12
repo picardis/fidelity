@@ -1,9 +1,16 @@
-#' Create Correlated Random Walk Scenario(s) (CRW)
+#' Create Correlated Random Walk Scenarios (CRW)
 #'
-#' \code{create_scenarios_crw} generates Correlated Random Walk scenario(s).
+#' Function to generate one or more Correlated Random Walk scenario/s.
 #'
-#' @inheritParams sim_crw
-#' @return Returns a data frame of all the possible Correlated Random Walk Scenario(s) based on rho values. Na is applied to Boundary_size, habitat_effect, beta, and lands.
+#' @param rho Numeric vector (of any length) of autocorrelation parameter values
+#' @return Returns a data frame describing scenario/s, one row per scenario
+#' for a total of \code{length(rho)} rows.
+#' Includes columns \code{rho},
+#' \code{boundary_size} (set to \code{NA} because not applicable to CRW),
+#' \code{habitat_effect} (set to \code{NA} because not applicable to CRW),
+#' \code{beta} (set to \code{NA} because not applicable to CRW), \code{lands}
+#' (set to \code{NA} because not applicable to CRW), and \code{scenario_id}
+#' (unique identifier for the scenario).
 #' @export
 create_scenarios_crw <- function(
   rho
@@ -29,12 +36,23 @@ create_scenarios_crw <- function(
 
 }
 
-#'  Create Constrained Correlated Random Walk Scenario(s) (CCRW)
+#' Create Constrained Correlated Random Walk Scenarios (CCRW)
 #'
-#' \code{create_scenarios_ccrw} generates Constrained Correlated Random Walk scenario(s).
+#' Function to generate one or more Constrained Correlated Random Walk scenario/s.
 #'
-#' @inheritParams sim_ccrw
-#' @return Returns a data frame of all the possible Constrained Correlated Random Walk Scenario(s) based on rho and boundary size values. Na is applied to habitat_effect, beta, and lands.
+#' @param rho Numeric vector (of any length) of autocorrelation parameter values
+#' @param boundary_size Numeric vector (of any length) specifying values for the
+#' size of the bounding box (length of the side). Units should be m if the
+#' user intends to use UTM coordinates for the simulation or degrees for lat/long.
+#' @return Returns a data frame describing scenario/s, one row per scenario
+#' using all possible combinations of the specified parameter values, for a
+#' total of \code{length(rho) * length(boundary_size)} rows.
+#' Includes columns \code{rho},
+#' \code{boundary_size},
+#' \code{habitat_effect} (set to \code{NA} because not applicable to CCRW),
+#' \code{beta} (set to \code{NA} because not applicable to CCRW), \code{lands}
+#' (set to \code{NA} because not applicable to CCRW), and \code{scenario_id}
+#' (unique identifier for the scenario).
 #' @export
 
 create_scenarios_ccrw <- function(
@@ -63,12 +81,23 @@ create_scenarios_ccrw <- function(
 
 }
 
-#'  Create Mixture Correlated Random Walk Scenario(s) (MCRW)
+#' Create Mixture Correlated Random Walk Scenarios (MCRW)
 #'
-#' \code{create_scenarios_mcrw} generates Mixture Correlated Random Walk scenario(s).
+#' Function to generate one or more Mixture Correlated Random Walk scenario/s.
 #'
-#' @inheritParams sim_mcrw
-#' @return Returns a data frame of all the possible Mixture Correlated Random Walk Scenario(s) based on rho, habitat effect, and lands values. Na is applied to boundary size and beta.
+#' @param rho Numeric vector (of any length) of autocorrelation parameter values
+#' @param habitat_effect Numeric vector (of any length) specifying values for
+#' the strength of the habitat effect.
+#' @param lands Character vector (of any length) providing the paths to the
+#' landscape rasters to be loaded from disk and used in the simulation.
+#' @return Returns a data frame describing scenario/s, one row per scenario
+#' using all possible combinations of the specified parameter values, for a
+#' total of \code{length(rho) * length(habitat_effect) * length(lands)} rows.
+#' Includes columns \code{rho},
+#' \code{boundary_size} (set to \code{NA} because not applicable to MCRW),
+#' \code{habitat_effect},
+#' \code{beta} (set to \code{NA} because not applicable to MCRW), \code{lands},
+#' and \code{scenario_id} (unique identifier for the scenario).
 #' @export
 
 create_scenarios_mcrw <- function(
@@ -103,12 +132,23 @@ create_scenarios_mcrw <- function(
 
 }
 
-#'  Create Biased Correlated Random Walk Scenario(s) (BCRW)
+#'  Create Biased Correlated Random Walk Scenarios (BCRW)
 #'
-#' \code{create_scenarios_bcrw} generates Biased Correlated Random Walk scenario(s).
+#' Function to generate one or more Biased Correlated Random Walk scenario/s.
 #'
-#' @inheritParams sim_bcrw
-#' @return Returns a data frame of all the possible Biased Correlated Random Walk Scenario(s) based on rho, beta, and lands values. Na is applied to boundary size and habitat effect.
+#' @param rho Numeric vector (of any length) of autocorrelation parameter values
+#' @param beta Numeric vector (of any length) specifying values for
+#' the bias parameter.
+#' @param lands Character vector (of any length) providing the paths to the
+#' landscape rasters to be loaded from disk and used in the simulation.
+#' @return Returns a data frame describing scenario/s, one row per scenario
+#' using all possible combinations of the specified parameter values, for a
+#' total of \code{length(rho) * length(beta) * length(lands)} rows.
+#' Includes columns \code{rho},
+#' \code{boundary_size} (set to \code{NA} because not applicable to BCRW),
+#' \code{habitat_effect} (set to \code{NA} because not applicable to BCRW),
+#' \code{beta}, \code{lands},
+#' and \code{scenario_id} (unique identifier for the scenario).
 #' @export
 
 create_scenarios_bcrw <- function(

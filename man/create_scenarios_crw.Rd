@@ -2,16 +2,23 @@
 % Please edit documentation in R/fidelity_funs_create-scenarios.R
 \name{create_scenarios_crw}
 \alias{create_scenarios_crw}
-\title{Create Correlated Random Walk Scenario(s) (CRW)}
+\title{Create Correlated Random Walk Scenarios (CRW)}
 \usage{
 create_scenarios_crw(rho)
 }
 \arguments{
-\item{rho}{Numeric. Movement autocorrelation parameter}
+\item{rho}{Numeric vector (of any length) of autocorrelation parameter values}
 }
 \value{
-Returns a data frame of all the possible Correlated Random Walk Scenario(s) based on rho values. Na is applied to Boundary_size, habitat_effect, beta, and lands.
+Returns a data frame describing scenario/s, one row per scenario
+for a total of \code{length(rho)} rows.
+Includes columns \code{rho},
+\code{boundary_size} (set to \code{NA} because not applicable to CRW),
+\code{habitat_effect} (set to \code{NA} because not applicable to CRW),
+\code{beta} (set to \code{NA} because not applicable to CRW), \code{lands}
+(set to \code{NA} because not applicable to CRW), and \code{scenario_id}
+(unique identifier for the scenario).
 }
 \description{
-\code{create_scenarios_crw} generates Correlated Random Walk scenario(s).
+Function to generate one or more Correlated Random Walk scenario/s.
 }

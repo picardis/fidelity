@@ -23,22 +23,24 @@ length distribution (Weibull)}
 
 \item{rho}{Numeric. Movement autocorrelation parameter}
 
-\item{start_loc}{Data frame with coordinates of the starting location
-(columns named x and y). 0, 0 if unprotected.}
+\item{start_loc}{Data frame with a single row containing coordinates of the
+starting location (columns \code{x} and \code{y}). 0, 0 if unprojected.}
 
-\item{habitat_effect}{Numeric. Strength of habitat response, values between XX-XX.}
+\item{habitat_effect}{Numeric. Strength of habitat response (range 0-1).}
 
-\item{lands}{\code{raster} of habitat quality (landscape)}
+\item{lands}{Raster of habitat quality.}
 
-\item{scenario_id}{Character string. Optional ID of the current scenario. Automatically assigned
-when using simulate_tracks().}
+\item{scenario_id}{Character string. Optional ID of the current scenario.
+Automatically assigned when using simulate_tracks().}
 
-\item{lands_name}{Path to the landscape file}
+\item{lands_name}{Path to the landscape file.}
 }
 \value{
-Returns a data frame containing the coordinates of each location along the
-simulated track and the associated simulation parameter values.
+Returns a data frame containing the coordinates of each location
+along the simulated track and the associated simulation parameter values as
+specified in \code{create_scenarios_mcrw}.
 }
 \description{
-\code{sim_mcrw} simulates a movement track with a Mixture Correlated Random Walk model.
+Function to simulate a movement track under a Mixture Correlated Random Walk
+model. Called as needed by \code{simulate_tracks}.
 }

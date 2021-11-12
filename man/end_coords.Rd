@@ -7,19 +7,23 @@
 end_coords(step, angle, start_x, start_y)
 }
 \arguments{
-\item{step}{Numeric. The step length in meters (m)}
+\item{step}{Numeric. Step length (m for UTM coordinates, degrees for lat/long)}
 
-\item{angle}{Numeric. The turning angle in degrees}
+\item{angle}{Numeric. Turning angle (degrees)}
 
-\item{start_x}{Numeric. The X coordinate of the start location (UTM)}
+\item{start_x}{Numeric. The X coordinate of the start location (UTM Easting
+or longitude)}
 
-\item{start_y}{Numeric. The Y coordinate of the start location (UTM)}
+\item{start_y}{Numeric. The Y coordinate of the start location (UTM Northing
+or latitude)}
 }
 \value{
-A data frame containing the end points coordinates from the step and turning angle input.
+A data frame containing the end points coordinates from the step and
+turning angle input.
 }
 \description{
-Function to calculate end point coordinates from step and turning angle
+Function to calculate end point coordinates from step and turning angle.
+Called by \code{sim_bcrw()}.
 }
 \details{
 Code adapted from https://rdrr.io/github/ptompalski/UsefulRFunctions/src/R/circular2xy.R

@@ -2,20 +2,29 @@
 % Please edit documentation in R/fidelity_funs_create-scenarios.R
 \name{create_scenarios_mcrw}
 \alias{create_scenarios_mcrw}
-\title{Create Mixture Correlated Random Walk Scenario(s) (MCRW)}
+\title{Create Mixture Correlated Random Walk Scenarios (MCRW)}
 \usage{
 create_scenarios_mcrw(rho, habitat_effect, lands)
 }
 \arguments{
-\item{rho}{Numeric. Movement autocorrelation parameter}
+\item{rho}{Numeric vector (of any length) of autocorrelation parameter values}
 
-\item{habitat_effect}{Numeric. Strength of habitat response, values between XX-XX.}
+\item{habitat_effect}{Numeric vector (of any length) specifying values for
+the strength of the habitat effect.}
 
-\item{lands}{\code{raster} of habitat quality (landscape)}
+\item{lands}{Character vector (of any length) providing the paths to the
+landscape rasters to be loaded from disk and used in the simulation.}
 }
 \value{
-Returns a data frame of all the possible Mixture Correlated Random Walk Scenario(s) based on rho, habitat effect, and lands values. Na is applied to boundary size and beta.
+Returns a data frame describing scenario/s, one row per scenario
+using all possible combinations of the specified parameter values, for a
+total of \code{length(rho) * length(habitat_effect) * length(lands)} rows.
+Includes columns \code{rho},
+\code{boundary_size} (set to \code{NA} because not applicable to MCRW),
+\code{habitat_effect},
+\code{beta} (set to \code{NA} because not applicable to MCRW), \code{lands},
+and \code{scenario_id} (unique identifier for the scenario).
 }
 \description{
-\code{create_scenarios_mcrw} generates Mixture Correlated Random Walk scenario(s).
+Function to generate one or more Mixture Correlated Random Walk scenario/s.
 }

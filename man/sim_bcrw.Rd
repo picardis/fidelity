@@ -25,26 +25,29 @@ length distribution (Weibull)}
 
 \item{rho}{Numeric. Movement autocorrelation parameter}
 
-\item{start_loc}{Data frame with coordinates of the starting location
-(columns named x and y). 0, 0 if unprotected.}
+\item{start_loc}{Data frame with a single row containing coordinates of the
+starting location (columns \code{x} and \code{y}). 0, 0 if unprojected.}
 
-\item{beta}{Numeric. Bias applied to the Biased Correlated Random Walk}
+\item{beta}{Numeric. Value of bias}
 
-\item{prange}{Numeric. Perceptual range radius (m) for BCRW.}
+\item{prange}{Numeric. Perceptual range radius. Units match the
+units of the coordinates: m if UTM, degrees if lat/long.}
 
-\item{lands}{\code{raster} of habitat quality (landscape)}
+\item{lands}{Raster of habitat quality.}
 
-\item{neighbors}{\code{raster} of the distance to neighboring cells (neighborhoods)}
+\item{neighbors}{List of cell neighborhoods created by \code{get_neighbors}.}
 
-\item{scenario_id}{Character string. Optional ID of the current scenario. Automatically assigned
-when using simulate_tracks().}
+\item{scenario_id}{Character string. Optional ID of the current scenario.
+Automatically assigned when using simulate_tracks().}
 
-\item{lands_name}{Path to the landscape file}
+\item{lands_name}{Path to the landscape file.}
 }
 \value{
-Returns a data frame containing the coordinates of each location along the
-simulated track and the associated simulation parameter values.
+Returns a data frame containing the coordinates of each location
+along the simulated track and the associated simulation parameter values as
+specified in \code{create_scenarios_bcrw}.
 }
 \description{
-\code{sim_bcrw} simulates a movement track with a Biased Correlated Random Walk model.
+Function to simulate a movement track under a Biased Correlated Random Walk
+model. Called as needed by \code{simulate_tracks}.
 }

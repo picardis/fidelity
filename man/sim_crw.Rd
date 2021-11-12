@@ -20,16 +20,18 @@ length distribution (Weibull)}
 
 \item{rho}{Numeric. Movement autocorrelation parameter}
 
-\item{start_loc}{Data frame with coordinates of the starting location
-(columns named x and y). 0, 0 if unprotected.}
+\item{start_loc}{Data frame with a single row containing coordinates of the
+starting location (columns \code{x} and \code{y}). 0, 0 if unprojected.}
 
-\item{scenario_id}{Character string. Optional ID of the current scenario. Automatically assigned
-when using simulate_tracks().}
+\item{scenario_id}{Character string. Optional ID of the current scenario.
+Automatically assigned when using simulate_tracks().}
 }
 \value{
 A data frame containing the coordinates of each location along the
-simulated track and the associated simulation parameter values.
+simulated track and the associated simulation parameter values as specified
+in \code{create_scenarios_crw}.
 }
 \description{
-\code{sim_crw} simulates a movement track with a Correlated Random Walk model.
+Function to simulate a movement track under a Correlated Random Walk model.
+Called as needed by \code{simulate_tracks}.
 }

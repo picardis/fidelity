@@ -1,10 +1,12 @@
 #' Simulate Correlated Random Walk (CRW)
 #'
-#' \code{sim_crw} simulates a movement track with a Correlated Random Walk model.
+#' Function to simulate a movement track under a Correlated Random Walk model.
+#' Called as needed by \code{simulate_tracks}.
 #'
 #' @inheritParams sim_bcrw
 #' @return A data frame containing the coordinates of each location along the
-#' simulated track and the associated simulation parameter values.
+#' simulated track and the associated simulation parameter values as specified
+#' in \code{create_scenarios_crw}.
 #' @export
 sim_crw <- function(n_steps,
                     sl_par,

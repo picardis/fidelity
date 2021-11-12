@@ -1,12 +1,33 @@
-#' Calculate Returns (Multiple)
+#' Calculate Returns (Multiple Tracks)
 #'
-#' \code{calc_returns} Function to calculate returns on multiple tracks based on temporal and spatial restrictions.
+#' Function to calculate returns on multiple tracks based on spatial and
+#' temporal criteria.
 #'
-#' @param tracks Data frame of movement tracks (e.g., output from simulate_tracks(), or a set of real tracks) with at minimum columns for id, x, y, and step.
-#' @param dist Numeric. Maximum distance (UNIT...m?) to be considered a return
-#' @param lag Vector of fidelity lags (one or more)
-#' @param window # Duration of the fidelity window (Inf if from the start of the track, an integer if shorter (e.g., 42 locations, which is a week at 6h resolution). Default is Inf.
-#' @return Data frame of movement tracks containing an additional column indicating a return (1 = return, 0 = no return) for each lag.
+#' @param tracks Data frame of movement tracks (e.g., output from
+#' \code{simulate_tracks()}, or a set of real tracks). Must contain columns
+#' \code{id} (individual identifier), \code{x} and \code{y} (UTM or lat/long
+#' coordinates) at a minimum.
+#' @param dist Numeric. Maximum distance to be considered a return. Unit should
+#' match the unit of the coordinates: m if UTM, degrees if lat/long.
+#' @param lag Numeric. Vector of fidelity lags (unit is locations, e.g., 42 for
+#' one week at 6h resolution). See Details for definition of fidelity lag.
+#' @param window # Duration of the fidelity window (\code{Inf} if from the start
+#' of the track, an integer if fixed duration; unit is locations, e.g., 42 for
+#' one week at 6h resolution). Default is \code{Inf}. See Details for definition
+#' of fidelity window.
+#' @return Data frame of movement tracks containing one additional column for
+#' each lag indicating whether the location is a return (1) or not (0).
+#' Locations outside the fidelity window are assigned \code{NA}.
+#' @details The fidelity lag defines what are considered "non-consecutive"
+#' visits: a visit within distance \code{dist} of a previously visited location
+#' is non-consecutive if it occurs at least \code{lag} days after the latest
+#' visit at that location.
+#'
+#' The fidelity window encompasses the range of eligible steps for returns to a
+#' location. For a location visited at time T, the fidelity window includes
+#' steps from time T - \code{lag} - \code{window} to time T - \code{lag}.
+#' Steps from T - \code{lag} + 1 to T are outside the fidelity window and any
+#' revisitations within that period are not counted as returns.
 #' @export
 
 calc_returns <- function(tracks,
@@ -14,6 +35,11 @@ calc_returns <- function(tracks,
                          lag,
                          window = Inf
                          ) {
+
+  # Check columns
+  if (is.null(tracks$id)) {stop("Column 'id' is missing")}
+  if (is.null(tracks$x)) {stop("Column 'x' is missing")}
+  if (is.null(tracks$y)) {stop("Column 'y' is missing")}
 
   # Check if tracks is the output of simulate_tracks()
   if (!is.null(tracks$scenario_id)) {
@@ -38,19 +64,38 @@ calc_returns <- function(tracks,
 }
 
 
-#' Calculate Returns (Single)
+#' Calculate Returns (Single Track)
 #'
-#' \code{calc_ret_track} Function to calculate returns for a single track based on temporal and spatial restrictions.
+#' Function to calculate returns for a single track. Called by
+#' \code{calc_returns()}.
 #'
-#' @param tracks Data frame of a movement track (e.g., output from simulate_tracks(), or a set of real tracks) with at minimum columns for id, x, y, and step.
+#' @param t Data frame of a single movement track (e.g., output from
+#' \code{simulate_tracks()} for one individual, or a real track). Must contain
+#' columns \code{x} and \code{y} (UTM or lat/long coordinates) at a minimum.
 #' @inheritParams calc_returns
-#' @return Data frame of a movement track containing an additional column indicating a return (1 = return, 0 = no return) for each lag.
+#' @return Returns the original track with one additional column for each lag
+#' indicating whether the location is a return (1) or not (0). Locations outside
+#' the fidelity window are assigned \code{NA}.
+#' #' @details The fidelity lag defines what are considered "non-consecutive"
+#' visits: a visit within distance \code{dist} of a previously visited location
+#' is non-consecutive if it occurs at least \code{lag} days after the latest
+#' visit at that location.
+#'
+#' The fidelity window encompasses the range of eligible steps for returns to a
+#' location. For a location visited at time T, the fidelity window includes
+#' steps from time T - \code{lag} - \code{window} to time T - \code{lag}.
+#' Steps from T - \code{lag} + 1 to T are outside the fidelity window and any
+#' revisitations within that period are not counted as returns.
 #' @export
 
 calc_ret_track <- function(t,
                            dist,
                            lag,
                            window = Inf) {
+
+  # Check columns
+  if (is.null(tracks$x)) {stop("Column 'x' is missing")}
+  if (is.null(tracks$y)) {stop("Column 'y' is missing")}
 
   n_steps <- nrow(t) - 1
 

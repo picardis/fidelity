@@ -1,13 +1,16 @@
 #' Simulate movement tracks
 #'
-#' \code{simulate_tracks} is a wrapper function to simulate multiple tracks for
-#' multiple scenarios (which can include multiple movement models).
+#' Wrapper function to simulate tracks under multiple scenarios/movement models.
 #'
-#' @param scenarios Data frame. Output of the create_scenarios() functions (one or multiple rbind together)
+#' @param scenarios Data frame defining parameter values for each scenario as
+#' formatted by \code{create_scenarios_crw()}, \code{create_scenarios_ccrw()},
+#' etc.
 #' @inheritParams sim_bcrw
 #' @param n_tracks Numeric. Number of tracks to simulate.
-#' @return Returns a data frame containing the coordinates of each location along the
-#' simulated track of multiple scenarios (including multiple movement models) and the associated simulation parameter values.
+#' @return Returns a data frame containing the coordinates of each location
+#' along the simulated tracks and the associated simulation parameter values as
+#' specified in \code{scenarios}. Each track is assigned an individual \code{id}
+#' under each scenario.
 #' @export
 simulate_tracks <- function(
   scenarios,

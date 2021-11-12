@@ -1,11 +1,13 @@
 #' Simulate Mixture Correlated Random Walk (MCRW)
 #'
-#' \code{sim_mcrw} simulates a movement track with a Mixture Correlated Random Walk model.
+#' Function to simulate a movement track under a Mixture Correlated Random Walk
+#' model. Called as needed by \code{simulate_tracks}.
 #'
 #' @inheritParams sim_bcrw
-#' @param habitat_effect Numeric. Strength of habitat response, values between XX-XX.
-#' @return Returns a data frame containing the coordinates of each location along the
-#' simulated track and the associated simulation parameter values.
+#' @param habitat_effect Numeric. Strength of habitat response (range 0-1).
+#' @return Returns a data frame containing the coordinates of each location
+#' along the simulated track and the associated simulation parameter values as
+#' specified in \code{create_scenarios_mcrw}.
 #' @export
 sim_mcrw <- function(n_steps,
                      sl_par,

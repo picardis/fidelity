@@ -2,25 +2,28 @@
 % Please edit documentation in R/fidelity_funs_simulate-landscapes.R
 \name{sim_land}
 \alias{sim_land}
-\title{Function to generate simulated landscapes}
+\title{Generate simulated landscapes}
 \usage{
 sim_land(res, ext, orig, contagion, constancy)
 }
 \arguments{
-\item{res}{Resolution of the raster in m. Numeric value.}
+\item{res}{Numeric. Resolution of the raster (units match the units of the
+coordinates, m if UTM and degrees if lat/long)}
 
-\item{ext}{Extent of the raster in m. Numeric value.}
+\item{ext}{Numeric. Raster extent (units match the units of the coordinates,
+m if UTM and degrees if lat/long)}
 
 \item{orig}{Named vector of x and y coordinates of the center of the raster.}
 
-\item{contagion}{Vector of contagion values to simulate.}
+\item{contagion}{Numeric vector (any length) of contagion values to simulate.}
 
-\item{constancy}{Vector of constancy values to simulate.}
+\item{constancy}{Numeric vector (any length) of constancy values to simulate.}
 }
 \value{
-\code{Raster} or \code{RasterStack} of simulated landscapes.
+\code{Raster} or \code{RasterStack} of simulated landscapes. As many
+as \code{length(contagion) * length(constancy)}.
 }
 \description{
-\code{sim_land} generates a simulated landscape of user-specified ext,
-resolution, origin, and spatial properties (contagion and constancy)
+Function to generate one or a set of simulated landscapes of user-specified
+extent, resolution, origin, and spatial properties (contagion and constancy)
 }

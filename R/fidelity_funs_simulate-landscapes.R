@@ -1,14 +1,17 @@
-#' Function to generate simulated landscapes
+#' Generate simulated landscapes
 #'
-#' \code{sim_land} generates a simulated landscape of user-specified ext,
-#' resolution, origin, and spatial properties (contagion and constancy)
+#' Function to generate one or a set of simulated landscapes of user-specified
+#' extent, resolution, origin, and spatial properties (contagion and constancy)
 #'
-#' @param res Resolution of the raster in m. Numeric value.
-#' @param ext Extent of the raster in m. Numeric value.
+#' @param res Numeric. Resolution of the raster (units match the units of the
+#' coordinates, m if UTM and degrees if lat/long)
+#' @param ext Numeric. Raster extent (units match the units of the coordinates,
+#' m if UTM and degrees if lat/long)
 #' @param orig Named vector of x and y coordinates of the center of the raster.
-#' @param contagion Vector of contagion values to simulate.
-#' @param constancy Vector of constancy values to simulate.
-#' @return \code{Raster} or \code{RasterStack} of simulated landscapes.
+#' @param contagion Numeric vector (any length) of contagion values to simulate.
+#' @param constancy Numeric vector (any length) of constancy values to simulate.
+#' @return \code{Raster} or \code{RasterStack} of simulated landscapes. As many
+#' as \code{length(contagion) * length(constancy)}.
 #' @export
 sim_land <- function(res,
                      ext,

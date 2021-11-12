@@ -1,22 +1,25 @@
 #' Simulate Biased Correlated Random Walk (BCRW)
 #'
-#' \code{sim_bcrw} simulates a movement track with a Biased Correlated Random Walk model.
+#' Function to simulate a movement track under a Biased Correlated Random Walk
+#' model. Called as needed by \code{simulate_tracks}.
 #'
 #' @param n_steps Numeric. Number of steps to simulate
 #' @param sl_par Vector of length 2 containing the shape and scale of the step
 #' length distribution (Weibull)
 #' @param rho Numeric. Movement autocorrelation parameter
-#' @param start_loc Data frame with coordinates of the starting location
-#' (columns named x and y). 0, 0 if unprotected.
-#' @param beta Numeric. Bias applied to the Biased Correlated Random Walk
-#' @param prange Numeric. Perceptual range radius (m) for BCRW.
-#' @param lands \code{raster} of habitat quality (landscape)
-#' @param neighbors \code{raster} of the distance to neighboring cells (neighborhoods)
-#' @param scenario_id Character string. Optional ID of the current scenario. Automatically assigned
-#' when using simulate_tracks().
-#' @param lands_name Path to the landscape file
-#' @return Returns a data frame containing the coordinates of each location along the
-#' simulated track and the associated simulation parameter values.
+#' @param start_loc Data frame with a single row containing coordinates of the
+#' starting location (columns \code{x} and \code{y}). 0, 0 if unprojected.
+#' @param beta Numeric. Value of bias
+#' @param prange Numeric. Perceptual range radius. Units match the
+#' units of the coordinates: m if UTM, degrees if lat/long.
+#' @param lands Raster of habitat quality.
+#' @param neighbors List of cell neighborhoods created by \code{get_neighbors}.
+#' @param scenario_id Character string. Optional ID of the current scenario.
+#' Automatically assigned when using simulate_tracks().
+#' @param lands_name Path to the landscape file.
+#' @return Returns a data frame containing the coordinates of each location
+#' along the simulated track and the associated simulation parameter values as
+#' specified in \code{create_scenarios_bcrw}.
 #' @export
 sim_bcrw <- function(n_steps,
                      sl_par,

@@ -2,20 +2,29 @@
 % Please edit documentation in R/fidelity_funs_create-scenarios.R
 \name{create_scenarios_bcrw}
 \alias{create_scenarios_bcrw}
-\title{Create Biased Correlated Random Walk Scenario(s) (BCRW)}
+\title{Create Biased Correlated Random Walk Scenarios (BCRW)}
 \usage{
 create_scenarios_bcrw(rho, beta, lands)
 }
 \arguments{
-\item{rho}{Numeric. Movement autocorrelation parameter}
+\item{rho}{Numeric vector (of any length) of autocorrelation parameter values}
 
-\item{beta}{Numeric. Bias applied to the Biased Correlated Random Walk}
+\item{beta}{Numeric vector (of any length) specifying values for
+the bias parameter.}
 
-\item{lands}{\code{raster} of habitat quality (landscape)}
+\item{lands}{Character vector (of any length) providing the paths to the
+landscape rasters to be loaded from disk and used in the simulation.}
 }
 \value{
-Returns a data frame of all the possible Biased Correlated Random Walk Scenario(s) based on rho, beta, and lands values. Na is applied to boundary size and habitat effect.
+Returns a data frame describing scenario/s, one row per scenario
+using all possible combinations of the specified parameter values, for a
+total of \code{length(rho) * length(beta) * length(lands)} rows.
+Includes columns \code{rho},
+\code{boundary_size} (set to \code{NA} because not applicable to BCRW),
+\code{habitat_effect} (set to \code{NA} because not applicable to BCRW),
+\code{beta}, \code{lands},
+and \code{scenario_id} (unique identifier for the scenario).
 }
 \description{
-\code{create_scenarios_bcrw} generates Biased Correlated Random Walk scenario(s).
+Function to generate one or more Biased Correlated Random Walk scenario/s.
 }

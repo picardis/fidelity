@@ -15,27 +15,31 @@ simulate_tracks(
 )
 }
 \arguments{
-\item{scenarios}{Data frame. Output of the create_scenarios() functions (one or multiple rbind together)}
+\item{scenarios}{Data frame defining parameter values for each scenario as
+formatted by \code{create_scenarios_crw()}, \code{create_scenarios_ccrw()},
+etc.}
 
 \item{n_steps}{Numeric. Number of steps to simulate}
 
 \item{n_tracks}{Numeric. Number of tracks to simulate.}
 
-\item{start_loc}{Data frame with coordinates of the starting location
-(columns named x and y). 0, 0 if unprotected.}
+\item{start_loc}{Data frame with a single row containing coordinates of the
+starting location (columns \code{x} and \code{y}). 0, 0 if unprojected.}
 
 \item{sl_par}{Vector of length 2 containing the shape and scale of the step
 length distribution (Weibull)}
 
-\item{prange}{Numeric. Perceptual range radius (m) for BCRW.}
+\item{prange}{Numeric. Perceptual range radius. Units match the
+units of the coordinates: m if UTM, degrees if lat/long.}
 
-\item{neighbors}{\code{raster} of the distance to neighboring cells (neighborhoods)}
+\item{neighbors}{List of cell neighborhoods created by \code{get_neighbors}.}
 }
 \value{
-Returns a data frame containing the coordinates of each location along the
-simulated track of multiple scenarios (including multiple movement models) and the associated simulation parameter values.
+Returns a data frame containing the coordinates of each location
+along the simulated tracks and the associated simulation parameter values as
+specified in \code{scenarios}. Each track is assigned an individual \code{id}
+under each scenario.
 }
 \description{
-\code{simulate_tracks} is a wrapper function to simulate multiple tracks for
-multiple scenarios (which can include multiple movement models).
+Wrapper function to simulate tracks under multiple scenarios/movement models.
 }

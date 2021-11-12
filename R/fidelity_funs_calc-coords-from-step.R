@@ -1,13 +1,17 @@
 #' Calculate End Point Coordinates
 #'
-#' Function to calculate end point coordinates from step and turning angle
+#' Function to calculate end point coordinates from step and turning angle.
+#' Called by \code{sim_bcrw()}.
 #'
 #' Code adapted from https://rdrr.io/github/ptompalski/UsefulRFunctions/src/R/circular2xy.R
-#' @param step Numeric. The step length in meters (m)
-#' @param angle Numeric. The turning angle in degrees
-#' @param start_x Numeric. The X coordinate of the start location (UTM)
-#' @param start_y Numeric. The Y coordinate of the start location (UTM)
-#' @return A data frame containing the end points coordinates from the step and turning angle input.
+#' @param step Numeric. Step length (m for UTM coordinates, degrees for lat/long)
+#' @param angle Numeric. Turning angle (degrees)
+#' @param start_x Numeric. The X coordinate of the start location (UTM Easting
+#' or longitude)
+#' @param start_y Numeric. The Y coordinate of the start location (UTM Northing
+#' or latitude)
+#' @return A data frame containing the end points coordinates from the step and
+#' turning angle input.
 #' @export
 end_coords <- function(step,
                        angle,

@@ -1,9 +1,11 @@
 #' Get Neighborhoods
 #'
-#' \code{get_neighbors} creates a vector of neighbors in the perceptual range for each cell in a landscape.
+#' Function to create a map of neighboring cells in a raster within a
+#' user-defined perceptual range distance of each cell.
 #'
 #' @inheritParams sim_bcrw
-#' @return Returns a list of the number of neighbors within the perceptual range for each cell in a landscape
+#' @return A list with one element per raster cell. Each element contains the
+#' identifiers of neighboring cells within the specified perceptual range.
 #' @export
 
 get_neighbors <- function(lands,

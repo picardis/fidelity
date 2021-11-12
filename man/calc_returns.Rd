@@ -2,22 +2,45 @@
 % Please edit documentation in R/fidelity_funs_calculate-returns.R
 \name{calc_returns}
 \alias{calc_returns}
-\title{Calculate Returns (Multiple)}
+\title{Calculate Returns (Multiple Tracks)}
 \usage{
 calc_returns(tracks, dist, lag, window = Inf)
 }
 \arguments{
-\item{tracks}{Data frame of movement tracks (e.g., output from simulate_tracks(), or a set of real tracks) with at minimum columns for id, x, y, and step.}
+\item{tracks}{Data frame of movement tracks (e.g., output from
+\code{simulate_tracks()}, or a set of real tracks). Must contain columns
+\code{id} (individual identifier), \code{x} and \code{y} (UTM or lat/long
+coordinates) at a minimum.}
 
-\item{dist}{Numeric. Maximum distance (UNIT...m?) to be considered a return}
+\item{dist}{Numeric. Maximum distance to be considered a return. Unit should
+match the unit of the coordinates: m if UTM, degrees if lat/long.}
 
-\item{lag}{Vector of fidelity lags (one or more)}
+\item{lag}{Numeric. Vector of fidelity lags (unit is locations, e.g., 42 for
+one week at 6h resolution). See Details for definition of fidelity lag.}
 
-\item{window}{# Duration of the fidelity window (Inf if from the start of the track, an integer if shorter (e.g., 42 locations, which is a week at 6h resolution). Default is Inf.}
+\item{window}{# Duration of the fidelity window (\code{Inf} if from the start
+of the track, an integer if fixed duration; unit is locations, e.g., 42 for
+one week at 6h resolution). Default is \code{Inf}. See Details for definition
+of fidelity window.}
 }
 \value{
-Data frame of movement tracks containing an additional column indicating a return (1 = return, 0 = no return) for each lag.
+Data frame of movement tracks containing one additional column for
+each lag indicating whether the location is a return (1) or not (0).
+Locations outside the fidelity window are assigned \code{NA}.
 }
 \description{
-\code{calc_returns} Function to calculate returns on multiple tracks based on temporal and spatial restrictions.
+Function to calculate returns on multiple tracks based on spatial and
+temporal criteria.
+}
+\details{
+The fidelity lag defines what are considered "non-consecutive"
+visits: a visit within distance \code{dist} of a previously visited location
+is non-consecutive if it occurs at least \code{lag} days after the latest
+visit at that location.
+
+The fidelity window encompasses the range of eligible steps for returns to a
+location. For a location visited at time T, the fidelity window includes
+steps from time T - \code{lag} - \code{window} to time T - \code{lag}.
+Steps from T - \code{lag} + 1 to T are outside the fidelity window and any
+revisitations within that period are not counted as returns.
 }

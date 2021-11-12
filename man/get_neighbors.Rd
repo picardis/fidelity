@@ -7,13 +7,16 @@
 get_neighbors(lands, prange)
 }
 \arguments{
-\item{lands}{\code{raster} of habitat quality (landscape)}
+\item{lands}{Raster of habitat quality.}
 
-\item{prange}{Numeric. Perceptual range radius (m) for BCRW.}
+\item{prange}{Numeric. Perceptual range radius. Units match the
+units of the coordinates: m if UTM, degrees if lat/long.}
 }
 \value{
-Returns a list of the number of neighbors within the perceptual range for each cell in a landscape
+A list with one element per raster cell. Each element contains the
+identifiers of neighboring cells within the specified perceptual range.
 }
 \description{
-\code{get_neighbors} creates a vector of neighbors in the perceptual range for each cell in a landscape.
+Function to create a map of neighboring cells in a raster within a
+user-defined perceptual range distance of each cell.
 }
