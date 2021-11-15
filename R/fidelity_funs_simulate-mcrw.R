@@ -72,7 +72,7 @@ sim_mcrw <- function(n_steps,
 
      }
 
-  out$step <- 0:n_steps
+  out$step <- 0:(nrow(out)-1)
   out$rho <- rho
   out$boundary_size <- NA
   out$habitat_effect <- habitat_effect

@@ -159,7 +159,7 @@ sim_bcrw <- function(n_steps,
 
   out <- data.frame(x = x, y = y)
 
-  out$step <- 0:n_steps
+  out$step <- 0:(nrow(out)-1)
   out$rho <- rho
   out$boundary_size <- NA
   out$habitat_effect <- NA

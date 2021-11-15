@@ -56,7 +56,7 @@ sim_ccrw <- function(n_steps,
     out <- rbind(out, data.frame(x = x, y = y))
   }
 
-  out$step <- 0:n_steps
+  out$step <- 0:(nrow(out)-1)
   out$rho <- rho
   out$boundary_size <- boundary_size
   out$habitat_effect <- NA
