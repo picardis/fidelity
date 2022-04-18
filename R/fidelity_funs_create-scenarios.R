@@ -28,7 +28,9 @@ create_scenarios_crw <- function(
                       boundary_size = NA,
                       habitat_effect = NA,
                       beta = NA,
-                      lands = NA)
+                      lands = NA,
+                      kappa = NA,
+                      chi = NA)
 
   scen$scenario_id <- paste0("CRW_", 1:nrow(scen))
 
@@ -73,7 +75,9 @@ create_scenarios_ccrw <- function(
                       boundary_size = boundary_size,
                       habitat_effect = NA,
                       beta = NA,
-                      lands = NA)
+                      lands = NA,
+                      kappa = NA,
+                      chi = NA)
 
   scen$scenario_id <- paste0("CCRW_", 1:nrow(scen))
 
@@ -124,7 +128,11 @@ create_scenarios_mcrw <- function(
                       boundary_size = NA,
                       habitat_effect = habitat_effect,
                       beta = NA,
-                      lands = lands)
+                      lands = lands,
+                      kappa = as.numeric(str_extract(names(lands),
+                                          "(?<=kappa_)(.+)(?=_chi)")),
+                      chi = as.numeric(str_extract(names(lands),
+                                        "(?<=chi_)(.+)(?=.tif)")))
 
   scen$scenario_id <- paste0("MCRW_", 1:nrow(scen))
 
@@ -175,7 +183,11 @@ create_scenarios_bcrw <- function(
                       boundary_size = NA,
                       habitat_effect = NA,
                       beta = beta,
-                      lands = lands)
+                      lands = lands,
+                      kappa = as.numeric(str_extract(names(lands),
+                                                     "(?<=kappa_)(.+)(?=_chi)")),
+                      chi = as.numeric(str_extract(names(lands),
+                                                   "(?<=chi_)(.+)(?=.tif)")))
 
   scen$scenario_id <- paste0("BCRW_", 1:nrow(scen))
 

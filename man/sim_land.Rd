@@ -4,7 +4,7 @@
 \alias{sim_land}
 \title{Generate simulated landscapes}
 \usage{
-sim_land(res, ext, orig, contagion, constancy)
+sim_land(res, ext, orig, kappa, chi)
 }
 \arguments{
 \item{res}{Numeric. Resolution of the raster (units match the units of the
@@ -15,15 +15,16 @@ m if UTM and degrees if lat/long)}
 
 \item{orig}{Named vector of x and y coordinates of the center of the raster.}
 
-\item{contagion}{Numeric vector (any length) of contagion values to simulate.}
+\item{kappa}{Numeric vector (any length) of contagion values to simulate.}
 
-\item{constancy}{Numeric vector (any length) of constancy values to simulate.}
+\item{chi}{Numeric vector (any length) of heterogeneity values to simulate.}
 }
 \value{
 \code{Raster} or \code{RasterStack} of simulated landscapes. As many
-as \code{length(contagion) * length(constancy)}.
+as \code{length(kappa) * length(chi)}.
 }
 \description{
 Function to generate one or a set of simulated landscapes of user-specified
-extent, resolution, origin, and spatial properties (contagion and constancy)
+extent, resolution, origin, and spatial properties (contagion and
+heterogeneity)
 }

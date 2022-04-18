@@ -44,12 +44,12 @@ sim_mcrw <- function(n_steps,
   for(s in 2:(n_steps + 1)) {
 
     sl_multiplier <- 10 * habitat_effect
-    new_shape <- qual[s - 1] * sl_multiplier * sl_par[2]
+    new_scale <- qual[s - 1] * sl_multiplier * sl_par[2]
     steps <- rweibull(1,
                       sl_par[1],
-                      sl_par[2] - (ifelse(new_shape > sl_par[2],
+                      sl_par[2] - (ifelse(new_scale > sl_par[2],
                                           sl_par[2] * 0.99,
-                                          new_shape)))
+                                          new_scale)))
 
     rho_new <- ifelse(rho - (qual[s - 1] * habitat_effect * rho) > 1,
                       1,
