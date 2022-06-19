@@ -118,17 +118,11 @@ calc_ret_track <- function(t,
         # Indices of steps within fidelity window
         fw <- start_fw:end_fw
 
-        # Is this location within the threshold distance of any
-        # previously visited locations?
-        wtd <- any(distmat[s, fw] <= dist)
-
-        if (wtd) {
+        # Is this location within the threshold distance of any previously
+        # visited locations?
+        rev[s] <- any(distmat[s, fw] <= dist) &
           # Had the animal left any of those locations before?
-          rev[s] <- any(distmat[which(distmat[s, fw] <= dist),
-                                start_fw:(s-1)] > dist)
-        } else {
-            rev[s] <- FALSE
-          }
+          any(distmat[which(distmat[s, fw] <= dist), start_fw:(s-1)] > dist)
 
       }
     }
