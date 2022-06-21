@@ -122,7 +122,7 @@ calc_ret_track <- function(t,
         # visited during the fidelity window?
         rev[s] <- any(distmat[which(distmat[s, fw] <= dist),
         # Had the animal left any of those locations during the residency window?
-                  end_fw:(s-1)] > dist)
+                  (end_fw + 1):(s - 1)] > dist)
 
       }
     }
