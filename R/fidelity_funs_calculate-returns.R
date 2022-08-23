@@ -46,8 +46,7 @@ calc_returns <- function(tracks,
     track_list <- split(tracks, f = paste(tracks$id, tracks$scenario_id))
   } else if (is.null(tracks$scenario_id)) {
     track_list <- split(tracks, f = tracks$id)
-    message("Looks like these are real (not simulated) tracks.
-            scenario_id is missing, splitting by id")
+    message("Scenario_id is missing, splitting by id only")
   }
 
   ret <- lapply(track_list, function(t) {calc_ret_track(t = t,
