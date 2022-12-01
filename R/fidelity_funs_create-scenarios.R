@@ -128,12 +128,10 @@ create_scenarios_mcrw <- function(
                       boundary_size = NA,
                       habitat_effect = habitat_effect,
                       beta = NA,
-                      lands = lands,
-                      kappa = as.numeric(stringr::str_extract(lands,
-                                          "(?<=kappa_)(.+)(?=_chi)")),
-                      chi = as.numeric(stringr::str_extract(lands,
-                                        "(?<=chi_)(.+)(?=.tif)")))
+                      lands = lands)
 
+  scen$kappa <- as.numeric(stringr::str_extract(lands, "(?<=kappa_)(.+)(?=_chi)"))
+  scen$chi <- as.numeric(stringr::str_extract(lands, "(?<=chi_)(.+)(?=.tif)"))
   scen$scenario_id <- paste0("MCRW_", 1:nrow(scen))
 
   return(scen)
@@ -147,7 +145,8 @@ create_scenarios_mcrw <- function(
 #' @param rho Numeric vector (of any length) of autocorrelation parameter values
 #' @param beta Numeric vector (of any length) specifying values for
 #' the bias parameter.
-#' @param lands Character vector (of any length) providing the paths to the
+#' @param lands Either a RasterStack in output from \code{sim_land} or a
+#' character vector providing the paths to the
 #' landscape rasters to be loaded from disk and used in the simulation.
 #' @return Returns a data frame describing scenario/s, one row per scenario
 #' using all possible combinations of the specified parameter values, for a
@@ -170,24 +169,19 @@ create_scenarios_bcrw <- function(
     stop("BCRW parameters cannot contain missing values")
   }
 
-  if (any(is.na(lands))) {
-    stop("Landscape cannot be missing")
-  }
-
   cat(paste0("Creating ", length(rho) *
                length(beta) *
                length(lands),
              " BCRW scenarios \n"))
 
-  scen <- expand.grid(rho = rho,
+scen <- expand.grid(rho = rho,
                       boundary_size = NA,
                       habitat_effect = NA,
                       beta = beta,
-                      lands = lands,
-                      kappa = as.numeric(stringr::str_extract(lands,
-                                                     "(?<=kappa_)(.+)(?=_chi)")),
-                      chi = as.numeric(stringr::str_extract(lands,
-                                                   "(?<=chi_)(.+)(?=.tif)")))
+                      lands = lands)
+scen$kappa <- as.numeric(stringr::str_extract(lands, "(?<=kappa_)(.+)(?=_chi)"))
+scen$chi <- as.numeric(stringr::str_extract(lands, "(?<=chi_)(.+)(?=.tif)"))
+
 
   scen$scenario_id <- paste0("BCRW_", 1:nrow(scen))
 

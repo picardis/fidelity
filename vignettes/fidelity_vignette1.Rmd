@@ -1,0 +1,125 @@
+---
+title: "Calculating animal site fidelity in R with package `fidelity`"
+author: "Simona Picardi"
+date: "December 2022"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{Calculating animal site fidelity in R with package `fidelity`}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(fidelity)
+```
+
+## Introduction
+
+The `fidelity` package provides functions to calculate animal site fidelity at
+multiple spatio-temporal scales by contrasting observed patterns of return to
+ecologically meaningful baseline expectations derived from null, memory-free
+movement models. This package is for you if:
+
+* You are interested in exploring the effect of movement parameters and 
+landscape characteristics on patterns of return using agent-based simulation;
+* You are interested in establishing an ecologically meaningful null expectation
+for site fidelity in your study system. 
+
+For more context, please refer to the associated paper: Picardi, S., Abrahms, B., Gelzer, E., Morrison, T., Verzuh, T., Merkle, J. "Defining null expectations for animal site fidelity". Ecology Letters (2022). https://doi.org/10.1111/ele.14148 
+
+Depending on which goal you are after, you will follow one of two possible 
+workflows, illustrated in this diagram:
+
+```{r flowchart, echo = FALSE, fig.cap = "", out.width = '100%'}
+
+knitr::include_graphics("flowchart.png")
+
+```
+
+## Goal 1: Explore effect of movement and landscape characteristics on patterns of return
+
+### Step 1: Parameterize simulation scenarios
+
+```{r scenarios crw}
+
+scen_crw <- create_scenarios_crw(rho = c(0, 0.5, 0.99))
+
+```
+
+```{r create landscapes, eval = FALSE}
+
+lands <- sim_land(res = 10, ext = 1000, orig = c("x" = 0, "y" = 0), kappa = c(50, 500), chi = 0.5)
+
+```
+
+```{r load landscapes, echo = FALSE, fig.dim = c(6, 3)}
+
+data(lands)
+
+raster::plot(lands)
+
+```
+
+```{r save landscapes, eval = FALSE}
+
+raster::writeRaster(lands, 
+                    filename = "Landscapes/land.tif", 
+                    bylayer = TRUE, 
+                    suffix = names(lands))
+
+```
+
+```{r name landscapes}
+
+land_names <- paste0("Landscapes/land_",
+                     names(lands), 
+                     ".tif")
+
+```
+
+```{r scenarios bcrw}
+
+scen_bcrw <- create_scenarios_bcrw(rho = 0.5,
+                                   beta = c(0, 0.1, 0.5),
+                                   lands = land_names)
+
+```
+
+```{r bind scenarios}
+
+(scen <- rbind(scen_crw, scen_bcrw))
+
+```
+ 
+### Simulate movement paths
+
+### Calculate patterns of return on simulated paths
+
+### Evaluate effect of simulation parameters on patterns of return
+
+## Goal 2: Quantify site fidelity by contrasting empirical data with an ecologically meaningful null expectation
+
+### Parameterize an appropriate null model
+
+```{r}
+
+```
+
+### Simulate movement paths
+
+### Calculate patterns of return on simulated paths
+
+### Calculate patterns of return on empirically observed paths
+
+### Compare

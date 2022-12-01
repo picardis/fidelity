@@ -12,7 +12,8 @@ create_scenarios_bcrw(rho, beta, lands)
 \item{beta}{Numeric vector (of any length) specifying values for
 the bias parameter.}
 
-\item{lands}{Character vector (of any length) providing the paths to the
+\item{lands}{Either a RasterStack in output from \code{sim_land} or a
+character vector providing the paths to the
 landscape rasters to be loaded from disk and used in the simulation.}
 }
 \value{
