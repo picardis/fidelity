@@ -11,6 +11,12 @@ To install the current version of fidelity:
   
 `remotes::install_github("picardis/fidelity", build_vignettes = TRUE)`
 
+## Vignette
+
+To read the package vignette (after installing the package):
+
+`RShowDoc("fidelity_vignette1", package = "fidelity")`
+
 ## Contribution Instructions
 
 Contributions are welcome through [Issues](https://github.com/picardis/fidelity/issues).
