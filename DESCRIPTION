@@ -24,3 +24,4 @@ RoxygenNote: 7.1.2
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)
+URL: https://picardis.github.io/fidelity/
