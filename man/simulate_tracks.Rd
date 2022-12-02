@@ -11,6 +11,7 @@ simulate_tracks(
   start_loc,
   sl_par,
   prange = NA,
+  jitter = TRUE,
   neighbors = NA
 )
 }
@@ -32,7 +33,9 @@ length distribution (Weibull)}
 \item{prange}{Numeric. Perceptual range radius. Units match the
 units of the coordinates: m if UTM, degrees if lat/long.}
 
-\item{neighbors}{List of cell neighborhoods created by \code{get_neighbors}.}
+\item{neighbors}{List of cell neighborhoods created by \code{get_neighbors}.
+#' @param jitter Logical. If \code{TRUE}, starting locations will be jittered
+by 20 km in any direction for spatially-explicit models (MCRW and BCRW).}
 }
 \value{
 Returns a data frame containing the coordinates of each location

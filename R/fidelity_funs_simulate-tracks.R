@@ -19,6 +19,7 @@ simulate_tracks <- function(
   start_loc,
   sl_par,
   prange = NA,
+  jitter = TRUE,
   neighbors = NA
 ){
 
@@ -96,7 +97,8 @@ simulate_tracks <- function(
                   scenario_id = x["scenario_id"],
                   lands = rast,
                   start_loc = start_loc,
-                  lands_name = x["lands"])}))
+                  lands_name = x["lands"],
+                  jitter = jitter)}))
 
         sims_id <- cbind.data.frame(id = i, sims_id)
 
@@ -143,7 +145,8 @@ simulate_tracks <- function(
                 start_loc = start_loc,
                 prange = prange,
                 neighbors = neighbors,
-                lands_name = x["lands"])}))
+                lands_name = x["lands"],
+                jitter = jitter)}))
 
       sims_id <- cbind.data.frame(id = i, sims_id)
 

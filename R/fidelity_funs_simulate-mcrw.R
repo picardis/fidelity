@@ -15,6 +15,7 @@ sim_mcrw <- function(n_steps,
                      start_loc,
                      habitat_effect,
                      lands,
+                     jitter,
                      scenario_id = NA,
                      lands_name = NA
                      ) {
@@ -22,13 +23,18 @@ sim_mcrw <- function(n_steps,
   if (is.na(rho)) {stop("Value of rho is NA")}
   if (is.na(habitat_effect)) {stop("Value of habitat_effect is NA")}
 
-  # Jitter starting points
+  if(jitter == TRUE) {
+    # Jitter starting points
   start_loc$x <- runif(n = 1,
                        min = start_loc$x - 20000,
                        max = start_loc$x + 20000)
   start_loc$y <- runif(n = 1,
                        min = start_loc$y - 20000,
                        max = start_loc$y + 20000)
+  } else {
+    x <- start_loc$x
+    y <- start_loc$y}
+
 
   # Initialize output
   out <- start_loc

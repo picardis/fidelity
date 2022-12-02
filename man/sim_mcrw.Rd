@@ -11,6 +11,7 @@ sim_mcrw(
   start_loc,
   habitat_effect,
   lands,
+  jitter,
   scenario_id = NA,
   lands_name = NA
 )

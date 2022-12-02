@@ -13,6 +13,7 @@ sim_bcrw(
   prange,
   lands,
   neighbors,
+  jitter,
   scenario_id = NA,
   lands_name = NA
 )
@@ -35,7 +36,9 @@ units of the coordinates: m if UTM, degrees if lat/long.}
 
 \item{lands}{Raster of habitat quality.}
 
-\item{neighbors}{List of cell neighborhoods created by \code{get_neighbors}.}
+\item{neighbors}{List of cell neighborhoods created by \code{get_neighbors}.
+#' @param jitter Logical. If \code{TRUE}, starting locations will be jittered
+by 20 km in any direction for spatially-explicit models (MCRW and BCRW).}
 
 \item{scenario_id}{Character string. Optional ID of the current scenario.
 Automatically assigned when using simulate_tracks().}

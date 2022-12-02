@@ -14,6 +14,8 @@
 #' units of the coordinates: m if UTM, degrees if lat/long.
 #' @param lands Raster of habitat quality.
 #' @param neighbors List of cell neighborhoods created by \code{get_neighbors}.
+#' #' @param jitter Logical. If \code{TRUE}, starting locations will be jittered
+#' by 20 km in any direction for spatially-explicit models (MCRW and BCRW).
 #' @param scenario_id Character string. Optional ID of the current scenario.
 #' Automatically assigned when using simulate_tracks().
 #' @param lands_name Path to the landscape file.
@@ -29,6 +31,7 @@ sim_bcrw <- function(n_steps,
                      prange,
                      lands,
                      neighbors,
+                     jitter,
                      scenario_id = NA,
                      lands_name = NA
                      ){
@@ -41,7 +44,8 @@ sim_bcrw <- function(n_steps,
     prange <- quantile(rweibull(10000, sl_par[1], sl_par[2]), 0.95)
   }
 
-  # Jitter starting points
+  if(jitter == TRUE) {
+    # Jitter starting points
   x <- c()
   x[1] <- runif(n = 1,
                 min = start_loc$x - 20000,
@@ -50,6 +54,10 @@ sim_bcrw <- function(n_steps,
   y[1] <- runif(n = 1,
                 min = start_loc$y - 20000,
                 max = start_loc$y + 20000)
+  } else {
+    x <- start_loc$x
+    y <- start_loc$y
+    }
 
   # Initialize output: data frame of coordinates, start with first location
   out <- data.frame(x = x, y = y)

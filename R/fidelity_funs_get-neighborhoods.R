@@ -27,12 +27,13 @@ get_neighbors <- function(lands,
   nm[n_cells + 1, n_cells + 1] <- 0
 
   # Get IDs of cells in the neighborhood of each cell
-  neigh <- lapply(1:ncell(lands),
+  neigh <- lapply(1:raster::ncell(lands),
                   function(cell) {
-                    raster::adjacent(x = sub,
+                    raster::adjacent(x = lands,
                                      cells = cell,
                                      directions = nm,
-                                     pairs = FALSE)
+                                     pairs = FALSE,
+                                     include = TRUE)
                   })
 
   return(neigh)
