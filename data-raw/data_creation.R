@@ -1,3 +1,7 @@
+# Set seed ####
+
+set.seed(1)
+
 # Neighbors ####
 
 data(lands)
@@ -8,6 +12,8 @@ neigh <- get_neighbors(lands[[1]], prange = prange)
 usethis::use_data(neigh, overwrite = TRUE)
 
 # Simulations ####
+
+prange <- 50
 
 scen_crw <- create_scenarios_crw(rho = c(0, 0.5, 0.99))
 
@@ -33,7 +39,26 @@ sim <- simulate_tracks(scenarios = scen,
                        jitter = FALSE,
                        neighbors = neigh)
 
+sim2 <- sim
+
+# Remove personal info
+sim$landscape <- stringr::word(sim$landscape, 6, 9, "/")
+
 usethis::use_data(sim, overwrite = TRUE)
+
+# Returns ####
+
+sim_list <- split(sim2, f = paste(sim2$id, sim2$scenario_id))
+
+rets <- do.call("rbind", lapply(1:length(sim_list),
+                                FUN = function(x) {
+                                  fidelity::calc_returns(
+                                    tracks = sim_list[[x]],
+                                    dist = 10,
+                                    lag = 10)
+                                }))
+
+usethis::use_data(rets, overwrite = TRUE)
 
 # Mule deer ####
 

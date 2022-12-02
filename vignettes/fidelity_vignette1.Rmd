@@ -37,82 +37,94 @@ landscape characteristics on patterns of return using agent-based simulation;
 * You are interested in establishing an ecologically meaningful null expectation
 for site fidelity in your study system. 
 
-For more context, please refer to the associated paper: Picardi, S., Abrahms, B., Gelzer, E., Morrison, T., Verzuh, T., Merkle, J. "Defining null expectations for animal site fidelity". Ecology Letters (2022). https://doi.org/10.1111/ele.14148 
+For more context, please refer to the associated paper: 
+
+> Picardi, S., Abrahms, B., Gelzer, E., Morrison, T., Verzuh, T., Merkle, J. "Defining null expectations for animal site fidelity". Ecology Letters (2022). https://doi.org/10.1111/ele.14148 
 
 Depending on which goal you are after, you will follow one of two possible 
 workflows, illustrated in this diagram:
 
 ```{r flowchart, echo = FALSE, fig.cap = "", out.width = '100%'}
-
 knitr::include_graphics("flowchart.png")
-
 ```
 
 ## Goal 1: Explore effect of movement and landscape characteristics on patterns of return
 
-### Step 1: Parameterize simulation scenarios
+If our goal is to quantify how emerging patterns of return vary as a function of the underlying movement and landscape characteristics, we can use an agent-based simulation approach to generate movement tracks under a set of chosen movement models. This package implements movement models from the family of random walks. Within each model, we can define a set of scenarios that correspond to different sets of model parameter values. 
+
+### Parameterize simulation scenarios
+
+The simplest model implemented in `fidelity` is a correlated random walk (CRW). Under this model, we can change the value of the parameter $\rho$ (the movement autocorrelation, or directional persistence). When $\rho = 0$, the model is a completely random walk, where each angle is independent of the previous one. As the value of $\rho$ increases, consecutive angles become increasingly correlated. We would expect a higher movement autocorrelation to result in fewer returns than a lower one. Let's use the function `create_scenarios_crw()` to parameterize three CRW scenarios:
 
 ```{r scenarios crw}
-
 scen_crw <- create_scenarios_crw(rho = c(0, 0.5, 0.99))
-
 ```
+
+The first scenario is a completely random walk, the second scenario is a correlated random walk with intermediate movement autocorrelation, and the third scenario is an almost perfectly correlated random walk.   
+
+As of now, three more movement models are implemented in `fidelity` besides a CRW: a constrained correlated random walk (CCRW), where an agent moves within a non-permeable reflective boundary that represents an enclosure; a mixture correlated random walk (MCRW), where an agent moves faster and straighter through unprofitable habitat and slower and more tortuously through profitable habitat; and a biased correlated random walk (BCRW), where an agent is attracted to profitable habitat in its surroundings. Unlike the first two, these last two models require that the agent moves on a landscape with heterogeneous habitat quality. Let's use BCRW as an example of how to parameterize this type of model.  
+
+To parameterize a BCRW scenario, we must start by creating one or more synthetic landscapes for the agent to move through. We can create landscapes in `fidelity` using the function `sim_land()`. Here, assuming meters as the units, I am creating a set of landscapes with a resolution of 10 m and a 1-km extent. I am defining the center point of the landscape at coordinates (0, 0). The parameter $\kappa$ indicates spatial aggregation, or how "clumpy" the habitat is. Let's create two landscapes with different amounts of spatial aggregation (50 and 500). The parameter $\chi$ indicates spatial heterogeneity, or how much habitat quality varies across the landscape. Here, we'll hold that constant for both landscapes. 
 
 ```{r create landscapes, eval = FALSE}
-
 lands <- sim_land(res = 10, ext = 1000, orig = c("x" = 0, "y" = 0), kappa = c(50, 500), chi = 0.5)
-
 ```
+
+This is what the resulting landscapes look like: 
 
 ```{r load landscapes, echo = FALSE, fig.dim = c(6, 3)}
-
 data(lands)
-
 raster::plot(lands)
-
 ```
 
-```{r save landscapes, eval = FALSE}
+The simulation functions we'll use will need to read the landscape rasters from disk, so let's go ahead and save them as files:
 
+```{r save landscapes, eval = FALSE}
 raster::writeRaster(lands, 
                     filename = "inst/Landscapes/land.tif", 
                     bylayer = TRUE, 
                     suffix = names(lands))
-
 ```
 
-```{r name landscapes}
+And it's important to assign names to each raster to match the path we're going to use to load them in (you can use absolute paths or, better, relative paths with respect to your working directory):
 
+```{r name landscapes}
 land_names <- paste0("inst/Landscapes/land_",
                      names(lands), 
                      ".tif")
-
 ```
 
-```{r scenarios bcrw}
+Now let's define a set of BCRW scenarios. We'll hold the value of $\rho$ constant across scenarios. The parameter $\beta$ is the directional bias and it indicates how strongly the agent is attracted to high-quality habitat. We'll create a scenario with no bias at all (note that, without bias, this is the same exact scenario as the second CRW scenario we parameterized above), a scenario with low bias, and a scenario with moderate bias. The higher the bias, the more likely we expect returns to occur. We want each of these sets of movement parameter in combination with each of the landscapes we have generated, for a total of 1 * 3 * 2 = 6 scenarios:
 
+```{r scenarios bcrw}
 scen_bcrw <- create_scenarios_bcrw(rho = 0.5,
                                    beta = c(0, 0.1, 0.5),
                                    lands = land_names)
-
 ```
 
+Now we can `rbind` all the scenarios together into a single data frame: 
+
 ```{r bind scenarios}
-
 (scen <- rbind(scen_crw, scen_bcrw))
-
 ```
  
 ### Simulate movement paths
 
-```{r neighbors, eval = FALSE}
-prange <- 50
+Once we have defined our simulation scenarios, it's time to simulate movement paths. To run a BCRW, we will need to specify a value of perceptual range, i.e., how far away can the agent perceive a high-quality patch and direct its movements towards it. This parameter should be set to a biologically reasonable value, and of course it is also interesting to see how results are affected by it. Here, we'll set the perceptual range to 50 m:
 
+```{r prange}
+prange <- 50
+```
+
+The BCRW simulation function will also require a map of pixel neighborhoods. These maps are specific to the landscape extent and resolution, so they will need to be re-calculated for new landscapes. In our case, the two landscapes have the same extent and resolution (only the value of $\kappa$ varies between them), so we can calculate the neighborhoods just once using one of the two landscapes as the template. We can use the function `get_neighbors()` and pass it our chosen value of perceptual range:
+
+```{r neighbors, eval = FALSE}
 neigh <- get_neighbors(lands[[1]], prange = prange)
 ```
 
-```{r simulate tracks, eval = FALSE}
+We are finally ready to simulate! The function `simulate_tracks()` is a wrapper function that will call the appropriate model-specific simulation function depending on how each scenario is parameterized, so we can run simulations on different types of models all at once. We'll need to define how many steps each simulation should run for (here, let's use 100), how many replicates should be run (if we wanted to make some robust conclusions we would need a large number of replicates, but for simplicity, let's just do 1 here), the coordinates of the starting location for each simulation (these can be jittered by setting `jitter = TRUE`), and the shape and scale of the step length distribution (assuming a Weibull distribution). The remaining arguments are used to pass to the function our scenario data frame, the value of perceptual range, and the neighborhood map: 
 
+```{r simulate tracks, eval = FALSE}
 sim <- simulate_tracks(scenarios = scen,
                        n_steps = 100,
                        n_tracks = 1,
@@ -121,68 +133,69 @@ sim <- simulate_tracks(scenarios = scen,
                        prange = prange,
                        jitter = FALSE,
                        neighbors = neigh)
-)
-
 ```
 
 ```{r load sims, echo = FALSE}
-
 data(sim)
-
 ```
+
+This is what the output of the simulation will look like: 
 
 ```{r show sims}
-
 head(sim)
 tail(sim)
-
 ```
 
-```{r plot crw, fig.dim = c(4, 4)}
+Let's take a look at the path we simulated under scenario `CRW_1` (a completely random walk): 
 
+```{r plot crw, fig.dim = c(4, 4)}
 plot(sim[sim$scenario_id == "CRW_1" & sim$id == 1, ]$x, 
      sim[sim$scenario_id == "CRW_1" & sim$id == 1, ]$y,
      type = "l", xlab = "x", ylab = "y")
-
 ```
 
-```{r plot bcrw1, fig.dim = c(4, 4)}
+Then, let's take a look at the path we simulated under scenario `BCRW_2` (a BCRW with low bias in a landscape with low aggregation):
 
+```{r plot bcrw1, fig.dim = c(4, 4)}
 raster::plot(lands[[1]])
 lines(sim[sim$scenario_id == "BCRW_2", ]$x, 
       sim[sim$scenario_id == "BCRW_2", ]$y)
-
 ```
+
+Finally, let's take a look at the path we simulated under scenario `BCRW_5` (a BCRW with low bias in a landscape with high aggregation):
 
 ```{r plot bcrw2, fig.dim = c(4, 4)}
-
 raster::plot(lands[[2]])
-lines(sim[sim$scenario_id == "BCRW_4", ]$x, 
-      sim[sim$scenario_id == "BCRW_4", ]$y)
-
+lines(sim[sim$scenario_id == "BCRW_5", ]$x, 
+      sim[sim$scenario_id == "BCRW_5", ]$y)
 ```
 
-```{r nrow}
+Notice that, in this scenario, the agent ends up reaching the edge of the landscape. In this case, the simulation is interrupted and the remainder of the steps are censored. This is why that specific scenario has only 83 rows instead of 101:
 
+```{r nrow}
 nrow(sim[sim$scenario_id == "BCRW_1", ])
 nrow(sim[sim$scenario_id == "BCRW_2", ])
 nrow(sim[sim$scenario_id == "BCRW_3", ])
 nrow(sim[sim$scenario_id == "BCRW_4", ])
 nrow(sim[sim$scenario_id == "BCRW_5", ])
 nrow(sim[sim$scenario_id == "BCRW_6", ])
-
 ```
 
 ### Calculate patterns of return on simulated paths
 
+Now that we have a set of simulated paths, we can calculate patterns of returns under each scenario. To make sure we only count returns within each scenario replicate, let's split the simulation results into a list based on the scenario ID and agent ID:
+
 ```{r split sims}
-
 sim_list <- split(sim, f = paste(sim$id, sim$scenario_id))
-
 ```
 
-```{r calc rets}
+The function `calc_returns()` assigns a 1 to steps that satisfy a custom definition of what a return is and a 0 to steps that do not. The definition can be customized in space using the argument `dist` -- how close to a previously visited location does the agent need to go for us to consider that a return? And it can be customized in time using the argument `lag` -- how long must the agent have been a distance `dist` away from that location before we count a new visit as a return rather than just residence? Here, we'll set `dist` to 10 meters and `lag` to 10 steps: 
 
+```{r load rets, echo = FALSE}
+data(rets)
+```
+
+```{r calc rets, eval = TRUE}
 rets <- do.call("rbind", lapply(1:length(sim_list),
                       FUN = function(x) {
                         fidelity::calc_returns(
@@ -190,35 +203,58 @@ rets <- do.call("rbind", lapply(1:length(sim_list),
                           dist = 10,
                           lag = 10)
                       }))
+```
 
+```{r show rets}
 head(rets, 15)
+```
 
+For each of the lags we specify (in this case, just one), the function will add a column to our simulation data frame: the value will be `NA` for steps that are ineligible to count as returns (in this case, the first 10), 0 for steps that are not returns, and 1 for steps that satisfy our definition of returns. In this case, none of the first 4 steps after our 10-step lag happened to be returns.  
+
+Besides knowing whether a return happened or not, we may also be interested in quantifying the spatial intensity of returns. This metric is useful because it can help us discriminate between returns that happen by chance (when few returns are spread among many locations) versus returns that are driven by more systematic drivers (when many returns are concentrated among few locations). The function `calc_spint()` calculates the spatial intensity of returns under each of our simulation scenarios: 
+
+```{r calc spint}
+spint <- calc_spint(rets = rets, dist = 10, lag = 10)
 ```
 
 ### Evaluate effect of simulation parameters on patterns of return
 
-```{r rho, fig.dim = c(6, 3)}
+Now we can take a look at how the parameter values we used in our scenarios affect the occurrence of returns as well as their spatial intensity. Let's look at the CRW model first:
 
+```{r rho, fig.dim = c(6, 3), message = FALSE}
 library(dplyr)
 library(ggplot2)
 
-ggplot(rets %>% filter(grepl("CRW", scenario_id)),
+ggplot(rets %>% filter(!grepl("BCRW", scenario_id)),
        aes(x = step, y = lag_10, color = factor(lag_10))) +
   geom_point() +
   facet_wrap(~ rho) +
   theme_bw() +
   labs(x = "Time step", y = "Return", color = "Return")
 
-ggplot(sim %>% filter(grepl("CRW", scenario_id)),
+ggplot(spint %>% 
+         filter(!grepl("BCRW", scenario_id)) %>% 
+                  group_by(scenario_id) %>% 
+                  summarize(mean_spint = mean(vals, na.rm = TRUE)),
+       aes(x = scenario_id, y = mean_spint)) +
+  geom_point() +
+  theme_bw() +
+  labs(x = "Scenario", y = "Spatial intensity of returns")
+```
+
+```{r crw paths, fig.dim = c(6, 2.5)}
+ggplot(sim %>% filter(!grepl("BCRW", scenario_id)),
        aes(x = x, y = y)) +
   geom_path() +
   facet_wrap(~ rho) +
   theme_void()
-
 ```
 
-```{r beta kappa50, fig.dim = c(6, 3)}
+These plots show that, the higher the movement autocorrelation, the less frequent returns become. There are only two values of spatial intensity because no returns at all occurred under the third scenario, and, based on one track only, we cannot detect a difference here (more replicates would have probably helped). When looking at the tracks, it is evident that movements become much more directed as the movement autocorrelation increases.  
 
+Now let's look at our BCRW scenarios. Let's start with those that we simulated over a landscape with low spatial aggregation: 
+
+```{r beta kappa50, fig.dim = c(6, 3)}
 ggplot(rets %>% filter(scenario_id %in% c("BCRW_1", "BCRW_2", "BCRW_3")),
        aes(x = step, y = lag_10, color = factor(lag_10))) +
   geom_point() +
@@ -226,16 +262,29 @@ ggplot(rets %>% filter(scenario_id %in% c("BCRW_1", "BCRW_2", "BCRW_3")),
   theme_bw() +
   labs(x = "Time step", y = "Return", color = "Return")
 
+ggplot(spint %>% 
+         filter(scenario_id %in% c("BCRW_1", "BCRW_2", "BCRW_3")) %>% 
+                  group_by(scenario_id) %>% 
+                  summarize(mean_spint = mean(vals, na.rm = TRUE)),
+       aes(x = scenario_id, y = mean_spint)) +
+  geom_point() +
+  theme_bw() +
+  labs(x = "Scenario", y = "Spatial intensity of returns")
+```
+
+```{r bcrw paths 1, fig.dim = c(6, 2.5)}
 ggplot(sim %>% filter(scenario_id %in% c("BCRW_1", "BCRW_2", "BCRW_3")),
        aes(x = x, y = y)) +
   geom_path() +
   facet_wrap(~ beta) +
   theme_void()
-
 ```
 
-```{r beta kappa500, fig.dim = c(6, 3)}
+Here, we can see that returns become more frequent as the bias towards profitable habitat increases. Spatial intensity is higher in the scenarios with bias compared to the scenario with no bias. When looking at the paths, notice the agent moving much more tortuously in the scenario with strongest bias because it encountered a profitable patch.   
 
+What happens when patches are much larger and high-quality habitat is more aggregated?
+
+```{r beta kappa500, fig.dim = c(6, 3)}
 ggplot(rets %>% filter(scenario_id %in% c("BCRW_4", "BCRW_5", "BCRW_6")),
        aes(x = step, y = lag_10, color = factor(lag_10))) +
   geom_point() +
@@ -243,66 +292,97 @@ ggplot(rets %>% filter(scenario_id %in% c("BCRW_4", "BCRW_5", "BCRW_6")),
   theme_bw() +
   labs(x = "Time step", y = "Return", color = "Return")
 
+ggplot(spint %>% 
+         filter(scenario_id %in% c("BCRW_4", "BCRW_5", "BCRW_6")) %>% 
+                  group_by(scenario_id) %>% 
+                  summarize(mean_spint = mean(vals, na.rm = TRUE)),
+       aes(x = scenario_id, y = mean_spint)) +
+  geom_point() +
+  theme_bw() +
+  labs(x = "Scenario", y = "Spatial intensity of returns")
+```
+
+```{r bcrw paths 2, fig.dim = c(6, 2.5)}
 ggplot(sim %>% filter(scenario_id %in% c("BCRW_4", "BCRW_5", "BCRW_6")),
        aes(x = x, y = y)) +
   geom_path() +
   facet_wrap(~ beta) +
   theme_void()
-
 ```
+
+Similarly, the stronger the bias, the more frequent the returns, although no returns at all happened under the second scenario in this particular instance (remember that this is the scenario where the agent happened to move out of the landscape, which means it had a shorter simulation and fewer chances to return). There are only two values of spatial intensity because no returns happened under one of the three scenarios, and we cannot really detect a difference there.  
+
+Through this exercise, we have learned some interesting facts about how simple metrics of behavior and landscape configuration should be expected to affect patterns of returns in real systems.  
 
 ## Goal 2: Quantify site fidelity by contrasting empirical data with an ecologically meaningful null expectation
 
+If our goal is to quantify site fidelity in an empirical system, we can use a slightly different workflow. Let's make an example with the data from [Picardi et al. 2022](https://onlinelibrary.wiley.com/doi/10.1111/ele.14148) (available at https://zenodo.org/record/7079984 -- thanks to Dr. Hall Sawyer for generously sharing these data with us!). These are real GPS-tracking data for one individual mule deer collected at a 2-hour resolution during the summer of 2016 in Wyoming: 
+
 ```{r load mule}
-
 head(mule)
-
 ```
+
+Rather than simply assuming that any returns we may observe in this animal's track must be due to memory, we can contrast the empirically observed returns with a baseline non-zero expectation derived from an appropriate null model via simulation.  
 
 ### Parameterize an appropriate null model
 
+Depending on the study objectives, different models can be appropriately chosen as null models for site fidelity. If the objective is to quantify whether the empirically observed returns are due to memory, one should strive to parameterize a null model realistic enough that it can be argued that all behavioral processes other than memory (e.g., movement, habitat selection) have been accounted for. If the observed patterns of returns still exceed what expected based on a model that accounts for everything but memory, then we can confidently attribute the excess to memory. In [Picardi et al. 2022](https://onlinelibrary.wiley.com/doi/10.1111/ele.14148), we used an integrated step selection function as a hyper-realistic null model that is able to account for the movement process and the habitat selection process simultaneously. If the objective is to quantify whether the empirically observed returns are generally due to systematic drivers rather than just pure chance, then a simple random walk can be an appropriate null model. Note that, in this case, no inference can be made on the specific drivers of the empirically observed returns, be it movement characteristics, habitat selection, or memory. All we can answer is whether the animal is returning more than would be expected under a random walk or not. Here, for simplicity, let's use a pure random walk as the null model: 
+
 ```{r random}
-
 random_scen <- create_scenarios_crw(rho = 0)
-
 ```
 
 ### Simulate movement paths
 
-```{r simulate}
+Let's simulate a random walk that starts at the same strating point and includes as many steps as the empirical mule deer track: 
 
+```{r simulate}
 sim_null <- simulate_tracks(scenarios = random_scen,
                        n_steps = nrow(mule),
                        n_tracks = 1,
                        start_loc = data.frame(x = mule$X[1], y = mule$Y[1]),
                        sl_par = c(0.6, 330))
-
 ```
+
+The step length parameters specified here were estimated for this individual mule deer at a 2-hour time resolution via integrated step selection analysis. 
 
 ### Calculate patterns of return on simulated paths
 
-```{r returns null}
+Let's now calculate the occurrence and spatial intensity of returns over the simulated track in output from the null random walk model:
 
+```{r returns null}
 ret_null <- fidelity::calc_returns(tracks = sim_null,
                           dist = 50,
                           lag = 12 * 7)
 
+spint_null <- fidelity::calc_spint(ret_null, 
+                                   dist = 50,
+                                   lag = 12 * 7)
 ```
+
+Note that we set the value of distance to 50 m, meaning that the animal needs to be within 50 m of a previously visited location for a visit to count as a return. We used a lag of 12 * 7 = 84, corresponding to a week (12 locations per day times 7 days), meaning that the animal needs to have been away from a location for at least one week for a new visit to count as a return. 
 
 ### Calculate patterns of return on empirically observed paths
 
-```{r returns observed}
+Let's now calculate the occurrence and spatial intensity of returns over the empirically observed mule deer track: 
 
+```{r returns observed}
 ret_obs <- fidelity::calc_returns(tracks = mule,
                           dist = 50,
                           lag = 12 * 7)
 
+spint_obs <- fidelity::calc_spint_track(ret_obs, 
+                                   dist = 50,
+                                   lag = 12 * 7)
 ```
+
+Note that, because this is a single track rather than a set of simulations from different scenarios, I used the function `calc_spint_track()` rather than `calc_spint()`. `calc_spint()` is just a wrapper that calls `calc_spint_track()` and applies it to a set of scenarios, but here it would not work to use it because there is no `scenario_id` column in the real data. If one wanted to calculate spatial intensity of returns over multiple empirical tracks at once, a solution is to simply add a "scenario ID" column to the real data with a different ID assigned to each track. 
 
 ### Compare
 
-```{r compare, fig.dim = c(6, 3)}
+Let's now compare patterns of returns in our empirically observed track with the null model: 
 
+```{r compare, fig.dim = c(6, 3)}
 ret_obs$type <- "Observed"
 ret_null$type <- "Null"
 ret_null$date <- c(ret_obs$date, NA)
@@ -314,9 +394,24 @@ ggplot(comp_ret, aes(x = date, y = lag_84, color = factor(lag_84))) +
   theme_bw() +
   labs(x = "Timestamp", y = "Return", color = "Return")
 
+spint_null$type <- "Null"
+comp_spint <- rbind(spint_null,
+                    data.frame(scenario_id = "real",
+                               vals = spint_obs,
+                               type = "Observed"))
+
+ggplot(comp_spint %>% 
+         group_by(type) %>% 
+         summarize(mean_spint = mean(vals, na.rm = TRUE)),
+       aes(x = type, y = mean_spint)) +
+  geom_point() +
+  theme_bw() +
+  labs(x = "Path type", y = "Spatial intensity of returns")
+
 ggplot(comp_ret, aes(x = x, y = y)) +
   geom_path() +
   facet_wrap(~ type, scales = "free") +
   theme_void()
-
 ```
+
+Both the frequency and the spatial intensity of returns are much higher in the observed track compared to the null, indicating that the returns observed in the empirical data cannot be explained by chance alone. 

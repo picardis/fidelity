@@ -89,7 +89,6 @@ calc_spint_track <- function(r,
   # Transform track into sf object
   r_sf <- sf::st_as_sf(r, coords = c("x", "y"))
 
-
   # Create raster with extent large enough to encompass all points and
   # resolution == the distance chosen for returns
   r <- raster::raster(xmn = floor(min(sf::st_coordinates(r_sf)[, 1]))-10,
