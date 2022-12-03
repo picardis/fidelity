@@ -326,17 +326,21 @@ Rather than simply assuming that any returns we may observe in this animal's tra
 
 ### Parameterize an appropriate null model
 
-Depending on the study objectives, different models can be appropriately chosen as null models for site fidelity. If the objective is to quantify whether the empirically observed returns are due to memory, one should strive to parameterize a null model realistic enough that it can be argued that all behavioral processes other than memory (e.g., movement, habitat selection) have been accounted for. If the observed patterns of returns still exceed what expected based on a model that accounts for everything but memory, then we can confidently attribute the excess to memory. In [Picardi et al. 2022](https://onlinelibrary.wiley.com/doi/10.1111/ele.14148), we used an integrated step selection function as a hyper-realistic null model that is able to account for the movement process and the habitat selection process simultaneously. If the objective is to quantify whether the empirically observed returns are generally due to systematic drivers rather than just pure chance, then a simple random walk can be an appropriate null model. Note that, in this case, no inference can be made on the specific drivers of the empirically observed returns, be it movement characteristics, habitat selection, or memory. All we can answer is whether the animal is returning more than would be expected under a random walk or not. Here, for simplicity, let's use a pure random walk as the null model: 
+Depending on the study objectives, different models can be appropriately chosen as null models for site fidelity. If the objective is to quantify whether the empirically observed returns are due to memory, one should strive to parameterize a null model realistic enough that it can be argued that all behavioral processes other than memory (e.g., movement, habitat selection) have been accounted for. If the observed patterns of returns still exceed what expected based on a model that accounts for everything but memory, then we can confidently attribute the excess to memory. In [Picardi et al. 2022](https://onlinelibrary.wiley.com/doi/10.1111/ele.14148), we used an integrated step selection function as a hyper-realistic null model that is able to account for the movement process and the habitat selection process simultaneously. If the objective is to quantify whether the empirically observed returns are generally due to systematic drivers rather than just pure chance, then a simple random walk can be an appropriate null model (but note that, in this case, no inference can be made on the specific drivers of the empirically observed returns, be it movement characteristics, habitat selection, or memory; all we can answer is whether the animal is returning more than would be expected under a random walk). Here, for simplicity, let's use a pure random walk as the null model: 
 
 ```{r random}
 random_scen <- create_scenarios_crw(rho = 0)
 ```
 
+An important note on null models: currently, `fidelity` only includes functions to simulate from a CRW, CCRW, MCRW, or BCRW; however, it is still possible to simulate from *any* chosen null model and still take advantage of the functions implemented in `fidelity` to calculate returns on the resulting tracks. This makes the framework highly customizable. 
+
 ### Simulate movement paths
 
-Let's simulate a random walk that starts at the same strating point and includes as many steps as the empirical mule deer track: 
+Let's simulate a random walk that starts at the same starting point and includes as many steps as the empirical mule deer track: 
 
 ```{r simulate}
+set.seed(1)
+
 sim_null <- simulate_tracks(scenarios = random_scen,
                        n_steps = nrow(mule),
                        n_tracks = 1,
